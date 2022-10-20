@@ -135,7 +135,7 @@ const loginToHbomax = async (email, password) => {
     const siteKey = '6LeMrv8ZAAAAAIcvo5HKvdj1lxtUdHnS13jUCulQ'
     const pageUrl = 'https://play.hbomax.com/signIn'
     const response = await axios.post(`http://2captcha.com/in.php?key=${apiKey}&googlekey=${siteKey}&pageurl=${pageUrl}&enterprise=1&json=1&method=userrecaptcha&version=v3&action=verify&min_score=0.3`)
-    
+    console.log(response)
 }
 
 
