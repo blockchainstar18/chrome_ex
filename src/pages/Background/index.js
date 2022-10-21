@@ -31,17 +31,13 @@ const getCaptcha = (apiKey, requestId) => {
                 if (result.request == 'CAPCHA_NOT_READY') {
                     setTimeout(() => {
                         getCaptcha(apiKey, requestId)
-                    }, 500);
+                    }, 1000);
                 }
-                if (result.request == 'ERROR_CAPTCHA_UNSOLVABLE')
-                    return
-                else {
-                    fetch(`http://2captcha.com/res.php?key=${apiKey}&action=reportbad&json=1&id=${requestId}`)
-                        .then((res) => {
-                            console.log(res.json())
-                        })
-                    console.log('result:', result.request)
-                }
+                // if (result.request == 'ERROR_CAPTCHA_UNSOLVABLE')
+                //     return
+                else
+                    return result.request
+
             })
         })
 }
@@ -66,6 +62,13 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
 
                                 setTimeout(() => {
                                     reCaptchaToken = getCaptcha(apiKey, requestId)
+
+                                    fetch(`http://2captcha.com/res.php?key=${apiKey}&action=reportbad&json=1&id=${requestId}`)
+                                        .then((res) => {
+                                            console.log(res.json())
+                                        })
+                                    console.log('result:', reCaptchaToken)
+
                                 }, 500);
                             }
                             // else {
