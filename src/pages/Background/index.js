@@ -47,14 +47,14 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
         ).then((res) => {
             res.json().then((result) => {
                 console.log(result.request)
-
-                fetch(`http://2captcha.com/res.php?key=${apiKey}&action=get&json=1&id=${result.request}`)
+                const requestId = result.request
+                fetch(`http://2captcha.com/res.php?key=${apiKey}&action=get&json=1&id=${requestId}`)
                     .then((res) => {
                         res.json().then((result) => {
                             console.log(result.request)
                             if (result.request == 'CAPCHA_NOT_READY') {
                                 setTimeout(() => {
-                                    getCaptcha(apiKey, result.request)
+                                    getCaptcha(apiKey, requestId)
                                 }, 500);
                             }
                         })
