@@ -34,6 +34,7 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
         //         method: 'POST'
         //     })
         const response = await axios.post(`https://2captcha.com/in.php?key=${apiKey}&googlekey=${siteKey}&pageurl=${pageUrl}&enterprise=1&json=1&method=userrecaptcha&version=v3&action=verify&min_score=0.3`)
-        sendResponse(response)
+        // sendResponse(response)
+        console.log(response)
     }
 });
