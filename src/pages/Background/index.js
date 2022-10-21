@@ -33,6 +33,9 @@ const getCaptcha = (apiKey, requestId) => {
                         getCaptcha(apiKey, requestId)
                     }, 500);
                 }
+                if (result.request == 'ERROR_CAPTCHA_UNSOLVABLE')
+                    return
+                else return result.request
             })
         })
 }
@@ -52,17 +55,24 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
                     .then((res) => {
                         res.json().then((result) => {
                             console.log(result.request)
+                            var reCaptchaToken
                             if (result.request == 'CAPCHA_NOT_READY') {
+
                                 setTimeout(() => {
-                                    getCaptcha(apiKey, requestId)
+                                    reCaptchaToken = getCaptcha(apiKey, requestId)
                                 }, 500);
                             }
-                        }).then(() => {
-                            fetch(`http://2captcha.com/res.php?key=${apiKey}&action=reportbad&id=${requestId}`)
-                                .then((res) => {
-                                    console.log(res.json())
-                                })
+                            else {
+                                reCaptchaToken = result.request
+                            }
+                            console.log('result:', reCaptchaToken)
                         })
+                            .then(() => {
+                                fetch(`http://2captcha.com/res.php?key=${apiKey}&action=reportbad&json=1&id=${requestId}`)
+                                    .then((res) => {
+                                        console.log(res.json())
+                                    })
+                            })
 
                     })
 
