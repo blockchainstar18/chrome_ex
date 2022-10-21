@@ -3,6 +3,7 @@
 import { printLine } from './modules/print';
 import axios from 'axios';
 import Cookies from 'js-cookie'
+import { Await } from 'react-router-dom';
 
 console.log('Content script works!');
 console.log('Must reload extension for modifications to take effect.');
