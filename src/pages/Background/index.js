@@ -35,8 +35,8 @@ const getCaptcha = (apiKey, requestId) => {
                 }
                 // if (result.request == 'ERROR_CAPTCHA_UNSOLVABLE')
                 //     return
-                else
-                    return result.request
+                // else
+                return result.request
 
             })
         })
@@ -59,7 +59,7 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
                 console.log('result:', reCaptchaToken)
                 fetch(`http://2captcha.com/res.php?key=${apiKey}&action=reportbad&json=1&id=${requestId}`)
                     .then((res) => {
-                        console.log(res.json())
+                        res.json().then((res) => console.log(res))
                     })
 
                 // fetch(`http://2captcha.com/res.php?key=${apiKey}&action=get&json=1&id=${requestId}`)
