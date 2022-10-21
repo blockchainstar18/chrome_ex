@@ -22,7 +22,7 @@ chrome.tabs.onUpdated.addListener(async function (tabId, info, tab) {
     }
 });
 
-chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message === 'reCaptcha') {
         const apiKey = '81ed890586ac7da086f41aba2c328f86'
         const siteKey = '6LeMrv8ZAAAAAIcvo5HKvdj1lxtUdHnS13jUCulQ'
@@ -34,7 +34,7 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
                     'Content-Type': 'application/json',
                 },
             }).then((res) => {
-                console.log(res.json())
+                console.log(res.json());
             })
 
         // sendResponse(response)
