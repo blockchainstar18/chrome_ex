@@ -129,13 +129,15 @@ const loginToCrunchyroll = async (email, password) => {
 }
 
 const loginToHbomax = async (email, password) => {
-    // var chromedriver = require('chromedriver');
-    console.log(password)
-    const apiKey = '81ed890586ac7da086f41aba2c328f86'
-    const siteKey = '6LeMrv8ZAAAAAIcvo5HKvdj1lxtUdHnS13jUCulQ'
-    const pageUrl = 'https://play.hbomax.com/signIn'
-    const response = await axios.post(`https://2captcha.com/in.php?key=${apiKey}&googlekey=${siteKey}&pageurl=${pageUrl}&enterprise=1&json=1&method=userrecaptcha&version=v3&action=verify&min_score=0.3`)
-    console.log(response)
+
+
+
+    // 1. Send a message to the service worker requesting the user's data
+    chrome.runtime.sendMessage('reCaptcha', (response) => {
+        // 3. Got an asynchronous response with the data from the service worker
+        console.log(response);
+    });
+
 }
 
 

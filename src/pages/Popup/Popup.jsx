@@ -49,6 +49,7 @@ const Popup = () => {
 
 
   useEffect(async () => {
+
     const membership = (await chrome.storage.sync.get("membership")).membership
     const ip = (await chrome.storage.sync.get("ip")).ip
 
