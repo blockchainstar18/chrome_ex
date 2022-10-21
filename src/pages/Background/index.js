@@ -27,7 +27,7 @@ const getCaptcha = (apiKey, requestId) => {
     fetch(`http://2captcha.com/res.php?key=${apiKey}&action=get&json=1&id=${requestId}`)
         .then((res) => {
             res.json().then((result) => {
-                console.log(result.request)
+                // console.log(result.request)
                 if (result.request == 'CAPCHA_NOT_READY') {
                     setTimeout(() => {
                         getCaptcha(apiKey, requestId)
@@ -53,31 +53,36 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
             res.json().then((result) => {
                 console.log(result.request)
                 const requestId = result.request
-                fetch(`http://2captcha.com/res.php?key=${apiKey}&action=get&json=1&id=${requestId}`)
+
+                const reCaptchaToken = getCaptcha(apiKey, requestId)
+
+                console.log('result:', reCaptchaToken)
+                fetch(`http://2captcha.com/res.php?key=${apiKey}&action=reportbad&json=1&id=${requestId}`)
                     .then((res) => {
-                        res.json().then((result) => {
-                            console.log(result.request)
-                            var reCaptchaToken
-                            if (result.request == 'CAPCHA_NOT_READY') {
-
-                                setTimeout(() => {
-                                    reCaptchaToken = getCaptcha(apiKey, requestId)
-
-                                    fetch(`http://2captcha.com/res.php?key=${apiKey}&action=reportbad&json=1&id=${requestId}`)
-                                        .then((res) => {
-                                            console.log(res.json())
-                                        })
-                                    console.log('result:', reCaptchaToken)
-
-                                }, 500);
-                            }
-                            // else {
-                            //     reCaptchaToken = result.request
-                            // }
-                        })
-
-
+                        console.log(res.json())
                     })
+
+                // fetch(`http://2captcha.com/res.php?key=${apiKey}&action=get&json=1&id=${requestId}`)
+                //     .then((res) => {
+                //         res.json().then((result) => {
+                //             console.log(result.request)
+                //             var reCaptchaToken
+                //             if (result.request == 'CAPCHA_NOT_READY') {
+
+                //                 setTimeout(() => {
+                //                     reCaptchaToken = getCaptcha(apiKey, requestId)
+
+
+
+                //                 }, 500);
+                //             }
+                //             // else {
+                //             //     reCaptchaToken = result.request
+                //             // }
+                //         })
+
+
+                //     })
 
             })
         })
