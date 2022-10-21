@@ -22,6 +22,22 @@ chrome.tabs.onUpdated.addListener(async function (tabId, info, tab) {
     }
 });
 
+
+const getCaptcha = (apiKey, requestId) => {
+    fetch(`http://2captcha.com/res.php?key=${apiKey}&action=get&json=1&id=${requestId}`)
+        .then((res) => {
+            res.json().then((result) => {
+                console.log(result.request)
+                if (result.request == 'CAPCHA_NOT_READY') {
+                    setTimeout(() => {
+                        getCaptcha(apiKey, requestId)
+                    }, 500);
+                }
+            })
+        })
+}
+
+
 chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     if (message === 'reCaptcha') {
         const apiKey = '81ed890586ac7da086f41aba2c328f86'
@@ -36,6 +52,11 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
                     .then((res) => {
                         res.json().then((result) => {
                             console.log(result.request)
+                            if (result.request == 'CAPCHA_NOT_READY') {
+                                setTimeout(() => {
+                                    getCaptcha(apiKey, result.request)
+                                }, 500);
+                            }
                         })
                     })
             })
