@@ -27,14 +27,17 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
         const apiKey = '81ed890586ac7da086f41aba2c328f86'
         const siteKey = '6LeMrv8ZAAAAAIcvo5HKvdj1lxtUdHnS13jUCulQ'
         const pageUrl = 'https://play.hbomax.com/signIn'
-        const response = await fetch(`https://2captcha.com/in.php?key=${apiKey}&googlekey=${siteKey}&pageurl=${pageUrl}&enterprise=1&json=1&method=userrecaptcha&version=v3&action=verify&min_score=0.3`,
+        const response = fetch(`https://2captcha.com/in.php?key=${apiKey}&googlekey=${siteKey}&pageurl=${pageUrl}&enterprise=1&json=1&method=userrecaptcha&version=v3&action=verify&min_score=0.3`,
             {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
             })
+        response.then((res) => {
+            console.log(res.json())
+        })
+
         // sendResponse(response)
-        console.log(response.json())
     }
 });
