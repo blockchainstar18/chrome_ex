@@ -29,9 +29,9 @@ const getCaptcha = (apiKey, requestId) => {
             res.json().then((result) => {
                 // console.log(result.request)
                 if (result.request == 'CAPCHA_NOT_READY') {
-                    setTimeout(() => {
-                        getCaptcha(apiKey, requestId)
-                    }, 1000);
+                    // setTimeout(() => {
+                    getCaptcha(apiKey, requestId)
+                    // }, 1000);
                 }
                 // if (result.request == 'ERROR_CAPTCHA_UNSOLVABLE')
                 //     return
