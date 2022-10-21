@@ -34,8 +34,11 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                     'Content-Type': 'application/json',
                 },
             }).then((res) => {
-                console.log(res);
-            }).then(res => console.log(res))
+                const result = res.json()
+                console.log(typeof (result))
+                console.log(result);
+
+            })
 
         // sendResponse(response)
     }
