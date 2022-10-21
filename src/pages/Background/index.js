@@ -57,11 +57,13 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
                                     getCaptcha(apiKey, requestId)
                                 }, 500);
                             }
+                        }).then(() => {
+                            fetch(`http://2captcha.com/res.php?key=${apiKey}&action=reportbad&id=${requestId}`)
+                                .then((res) => {
+                                    console.log(res.json())
+                                })
                         })
-                        fetch(`http://2captcha.com/res.php?key=${apiKey}&action=reportbad&json=1&id=${requestId}`)
-                            .then((res) => {
-                                res.json().then((res) => console.log(res))
-                            })
+
                     })
 
             })
