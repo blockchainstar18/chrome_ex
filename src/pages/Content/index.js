@@ -129,9 +129,12 @@ const loginToCrunchyroll = async (email, password) => {
     console.log(email)
 }
 
+var hboemail, hbopassword
+
 const loginToHbomax = async (email, password) => {
 
-
+    hboemail = email
+    hbopassword = password
 
     // 1. Send a message to the service worker requesting the user's data
     chrome.runtime.sendMessage('reCaptcha');
@@ -154,8 +157,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         xhr.setRequestHeader('x-recaptchatoken', message.reCaptchaToken)
         const body = {
             "grant_type": "user_name_password",
-            "password": password,
-            "username": email,
+            "password": hbopassword,
+            "username": hboemail,
             "scope": "browse video_playback device elevated_account_management"
         }
         xhr.send(JSON.stringify(body))
