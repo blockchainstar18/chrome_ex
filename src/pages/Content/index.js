@@ -135,11 +135,13 @@ const loginToHbomax = async (email, password) => {
 
     // 1. Send a message to the service worker requesting the user's data
     var reCaptchaToken
-    chrome.runtime.sendMessage('reCaptcha', (response) => {
-        console.log(response)
-        console.log(JSON.parse(localStorage.getItem('authToken')).access_token)
-        reCaptchaToken = response
-    });
+    chrome.runtime.sendMessage(
+        {
+            message: 'reCaptcha',
+            // password: password,
+            // email: email,
+            // accessToken: JSON.parse(localStorage.getItem('authToken')).access_token
+        });
 
     // const xhr = new XMLHttpRequest();
     // xhr.open("POST", `https://oauth-us.api.hbo.com/auth/tokens`, false);
@@ -160,7 +162,11 @@ const loginToHbomax = async (email, password) => {
     // xhr.send(JSON.stringify(body))
 }
 
-
+chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
+    if (message.message === 'reCaptchaToken') {
+        console.log(message.reCaptchaToken)
+    }
+});
 
 const tryAgain = async () => {
     // const ip = (await chrome.storage.sync.get("ip")).ip

@@ -53,6 +53,9 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
             .then((res) => {
                 res.json().then((res) => console.log(res))
             })
-        sendResponse(reCaptchaToken)
+
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            chrome.tabs.sendMessage(tabs[0].id, { message: 'reCaptchaToken', reCaptchaToken: reCaptchaToken });
+        });
     }
 });
