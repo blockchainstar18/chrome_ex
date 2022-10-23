@@ -31,8 +31,11 @@ const getCaptcha = async (apiKey, requestId) => {
         console.log('state: ', res.request)
         await getCaptcha(apiKey, requestId)
     }
-    reCaptchaToken = res.request
-    return
+    else {
+        reCaptchaToken = res.request
+        return
+    }
+
 }
 
 
