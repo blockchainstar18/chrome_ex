@@ -22,6 +22,7 @@ chrome.tabs.onUpdated.addListener(async function (tabId, info, tab) {
     }
 });
 
+// var reCaptchaToken
 
 const getCaptcha = async (apiKey, requestId) => {
     const response = await fetch(`http://2captcha.com/res.php?key=${apiKey}&action=get&json=1&id=${requestId}`)
@@ -35,13 +36,16 @@ const getCaptcha = async (apiKey, requestId) => {
     // return response.json().request
 
     const res = await response.json()
-    if (res.request == 'CAPCHA_NOT_READY')
+    if (res.request == 'CAPCHA_NOT_READY') {
+        console.log('state: ', res.request)
         setTimeout(async () => {
             await getCaptcha(apiKey, requestId)
         }, 1000);
+    }
+    else {
+        console.log('result: ', res.request)
+    }
 
-    console.log(res.request)
-    return res.request
     // .then((res) => {
     //     res.json().then((result) => {
     //         console.log(result.request)
@@ -77,9 +81,10 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
         const res = await response.json()
         const requestId = res.request
 
-        const reCaptchaToken = await getCaptcha(apiKey, requestId)
+        await getCaptcha(apiKey, requestId)
 
-        console.log('result:', reCaptchaToken)
+        // console.log('result:', reCaptchaToken)
+
         // fetch(`http://2captcha.com/res.php?key=${apiKey}&action=reportbad&json=1&id=${requestId}`)
         //     .then((res) => {
         //         res.json().then((res) => console.log(res))
