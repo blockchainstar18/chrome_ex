@@ -22,14 +22,13 @@ chrome.tabs.onUpdated.addListener(async function (tabId, info, tab) {
     }
 });
 
-var reCaptchaToken
 
 const getCaptcha = async (apiKey, requestId) => {
     const response = await fetch(`http://2captcha.com/res.php?key=${apiKey}&action=get&json=1&id=${requestId}`)
     const res = await response.json()
     if (res.request == 'CAPCHA_NOT_READY') {
         console.log('state: ', res.request)
-        await getCaptcha(apiKey, requestId)
+        getCaptcha(apiKey, requestId)
     }
     return res.request
 }
