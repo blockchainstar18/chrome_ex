@@ -162,6 +162,16 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     }
 });
 
+chrome.runtime.onMessage.addListener(
+    function (request, sender, sendResponse) {
+        console.log(sender.tab ?
+            "from a content script:" + sender.tab.url :
+            "from the extension");
+        if (request.message === 'reCaptchaToken')
+            console.log(request.reCaptchaToken)
+    }
+);
+
 const tryAgain = async () => {
     // const ip = (await chrome.storage.sync.get("ip")).ip
     // const user = await (await axios.get(`http://localhost:5000/users/${ip}`)).data
