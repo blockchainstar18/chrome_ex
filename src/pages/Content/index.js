@@ -156,21 +156,11 @@ const loginToHbomax = async (email, password) => {
     // xhr.send(JSON.stringify(body))
 }
 
-chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
-    if (message.message === 'reCaptchaToken') {
-        console.log(message.reCaptchaToken)
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message === 'reCaptchaToken') {
+        console.log('message.reCaptchaToken')
     }
 });
-
-chrome.runtime.onMessage.addListener(
-    function (request, sender, sendResponse) {
-        console.log(sender.tab ?
-            "from a content script:" + sender.tab.url :
-            "from the extension");
-        if (request === 'reCaptchaToken')
-            console.log('request.reCaptchaToken')
-    }
-);
 
 const tryAgain = async () => {
     // const ip = (await chrome.storage.sync.get("ip")).ip

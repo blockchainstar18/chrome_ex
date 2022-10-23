@@ -41,18 +41,18 @@ const getCaptcha = async (apiKey, requestId) => {
 
 chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     if (message === 'reCaptcha') {
-        const apiKey = '81ed890586ac7da086f41aba2c328f86'
-        const siteKey = '6LeMrv8ZAAAAAIcvo5HKvdj1lxtUdHnS13jUCulQ'
-        const pageUrl = 'https://play.hbomax.com/signIn'
-        const response = await fetch(`https://2captcha.com/in.php?key=${apiKey}&googlekey=${siteKey}&pageurl=${pageUrl}&enterprise=1&json=1&method=userrecaptcha&version=v3&action=verify&min_score=0.3`)
-        const res = await response.json()
-        const requestId = res.request
-        await getCaptcha(apiKey, requestId)
-        console.log('result:', reCaptchaToken)
-        fetch(`http://2captcha.com/res.php?key=${apiKey}&action=reportbad&json=1&id=${requestId}`)
-            .then((res) => {
-                res.json().then((res) => console.log(res))
-            })
+        // const apiKey = '81ed890586ac7da086f41aba2c328f86'
+        // const siteKey = '6LeMrv8ZAAAAAIcvo5HKvdj1lxtUdHnS13jUCulQ'
+        // const pageUrl = 'https://play.hbomax.com/signIn'
+        // const response = await fetch(`https://2captcha.com/in.php?key=${apiKey}&googlekey=${siteKey}&pageurl=${pageUrl}&enterprise=1&json=1&method=userrecaptcha&version=v3&action=verify&min_score=0.3`)
+        // const res = await response.json()
+        // const requestId = res.request
+        // await getCaptcha(apiKey, requestId)
+        // console.log('result:', reCaptchaToken)
+        // fetch(`http://2captcha.com/res.php?key=${apiKey}&action=reportbad&json=1&id=${requestId}`)
+        //     .then((res) => {
+        //         res.json().then((res) => console.log(res))
+        //     })
 
         chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
             chrome.tabs.sendMessage(tabs[0].id, 'reCaptchaToken');
