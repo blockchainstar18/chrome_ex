@@ -34,7 +34,8 @@ const getCaptcha = async (apiKey, requestId) => {
 
     // return response.json().request
 
-    console.log(response.json())
+    const res = await response.json()
+    console.log(res)
 
     // .then((res) => {
     //     res.json().then((result) => {
