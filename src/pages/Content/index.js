@@ -167,8 +167,8 @@ chrome.runtime.onMessage.addListener(
         console.log(sender.tab ?
             "from a content script:" + sender.tab.url :
             "from the extension");
-        if (request.message === 'reCaptchaToken')
-            console.log(request.reCaptchaToken)
+        if (request === 'reCaptchaToken')
+            console.log('request.reCaptchaToken')
     }
 );
 
