@@ -28,7 +28,7 @@ const getCaptcha = async (apiKey, requestId) => {
     const res = await response.json()
     if (res.request == 'CAPCHA_NOT_READY') {
         console.log('state: ', res.request)
-        getCaptcha(apiKey, requestId)
+        await getCaptcha(apiKey, requestId)
     }
     return res.request
 }
