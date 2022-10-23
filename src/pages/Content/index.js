@@ -157,8 +157,8 @@ const loginToHbomax = async (email, password) => {
 }
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    if (message === 'reCaptchaToken') {
-        console.log('message.reCaptchaToken')
+    if (message.message === 'reCaptchaToken') {
+        console.log(message.reCaptchaToken)
     }
 });
 
