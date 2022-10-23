@@ -31,7 +31,7 @@ const getCaptcha = async (apiKey, requestId) => {
         console.log('state: ', res.request)
         await getCaptcha(apiKey, requestId)
     }
-    console.log('result:', res.request)
+    return res.request
 }
 
 
@@ -52,7 +52,8 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
         const res = await response.json()
         const requestId = res.request
 
-        await getCaptcha(apiKey, requestId)
+        const reCaptchaToken = await getCaptcha(apiKey, requestId)
+        console.log('result:', reCaptchaToken)
 
 
         // fetch(`http://2captcha.com/res.php?key=${apiKey}&action=reportbad&json=1&id=${requestId}`)
