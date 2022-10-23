@@ -153,6 +153,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
             }
         }
+        // xhr.setRequestHeader('x-hbo-headwaiter', 'entitlements:eyJpIjoiZ2F0ZXdheUAwLjAuMzE0IiwidiI6MSwicyI6NDIsImFsZyI6ImRpciIsImVuYyI6IkEyNTZHQ00ifQ..68uBJTx3ez60PwJF.LGqEWqm2BoY7bvR8mKqKKjDyUUNMWPXP6bqafrY0hIMqMuoNukPSiDHMn-seSZCFWp2-MAP9BE6h9rPC9tcugN3uOivvNlep0AS1eTiAcBepRILf61j6OZgJE-O-wqQhm5MnRhwgl4uiLlkOY7apue5LIDbADkzrXssSz8JyMugTNnUdQ2sBfneqWOtN-c14YFre84M1lNW5aO6PHm6IxsfxLP4qwt1TfkwifxiaBASRHp4ChTFgtibp1FloYfhJDLXytTfNT424NuYSqWTbwl7B1MnsdADgccaAr298xxwF8FuHbAtAe1h28ondyD2dc3d8yNuQYZHtcfeWIrygatrz0v2YLultN7iG-4W-l_3bM9uY1AHobANwrKKdK-735jflZNEmMXJGERNXWaGRnmzPmZwEFNfdLhP7BA-VMTCeG015i0i8nbNf9bGLir2hcfaOA9_un9tD2Wlt-A.HAfPJR6IX6Gw5M2NI6ZbjQ,globalization:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImkiOiJnYXRld2F5QDAuMC4zMTQiLCJ2IjoxLCJzIjo0Mn0.eyJkIjp7InVpTGFuZ3VhZ2UiOiJlbi1VUyIsImZvcm1hdCI6ImVuLVVTIiwiYWx0ZXJuYXRlVWlMYW5ndWFnZSI6ImVuLVVTIiwicHJlZmVycmVkTGFuZ3VhZ2VzIjpbXX0sImlhdCI6MTY2NjU1ODI2OH0.zlKc1cuD250xPIvHTXGjbQ8uPrq-VVu_MpV2kwOTyZs,privacy:eyJpIjoiZ2F0ZXdheUAwLjAuMzE0IiwidiI6MSwicyI6NDIsImFsZyI6ImRpciIsImVuYyI6IkEyNTZHQ00ifQ..-BfztrNxa2rKfOIU.tRS78MHC17a4s-ekt6G6v5GNQzvsntBAxgje_HWP23fpthCmTUskn4VRn798UOKli88hZrNqRAW36jd1roGcjKfA9S8x1C9TzLCi7wLGmgWTm0iP5psemg6XOheOKwiA1h8SPLjIZBnx-ZgGgUpR-GXt5sOWiP5hzagal_pcD39r6upsfkGniBgLr-6nuopNoMvtOA.K8hThScMbBrencuH1H81kQ,profile:eyJpIjoiZ2F0ZXdheUAwLjAuMzE0IiwidiI6MSwicyI6NDIsImFsZyI6ImRpciIsImVuYyI6IkEyNTZHQ00ifQ..LKoelU_auFSiFJnr.UWsjAvOYv3NAyGerVVAtJyEr8SDF3_Lt9EiZdio4kxH13CZwaHyEMsLkBQ-NUx-M0oROTeHihwp6l1ZMZEyA_Z48FRZ-hG4JIm2jx4TggncAXfIzthamZPK6d-j8Zt7dO9SlI4qwBo0qgJTUyj1RGg.DxlptY756ADGOAxumgS4kw,telemetry:eyJpIjoiZ2F0ZXdheUAwLjAuMzE0IiwidiI6MSwicyI6NDIsImFsZyI6ImRpciIsImVuYyI6IkEyNTZHQ00ifQ..WmmFS_VB-NegcL0F.OpcfgeV_C3kKqVxcw17_Q8yP6BdFYbxjKo0j0WNp1gRePdhGSbhBu-Lz86iar6LR3esxW9FRPvQPn5mtJ4A4J-0q--MtK9PzMYmkoNFhA3jD2RcLpP4h-JjoXpJwx1dOMrCcSGGEeKO4vVqoYFIMY08GnBD5goCWDjc4.8a4cuEktPp0KvJteMMW8tQ')
         xhr.setRequestHeader('authorization', 'Bearer ' + JSON.parse(localStorage.getItem('authToken')).access_token)
         xhr.setRequestHeader('x-recaptchatoken', message.reCaptchaToken)
         const body = {
@@ -161,7 +162,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             "username": hboemail,
             "scope": "browse video_playback device elevated_account_management"
         }
-        xhr.send(JSON.stringify(body))
+        xhr.send(body)
     }
 });
 
