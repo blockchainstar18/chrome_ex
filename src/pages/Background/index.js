@@ -35,8 +35,10 @@ const getCaptcha = async (apiKey, requestId) => {
     // return response.json().request
 
     const res = await response.json()
-    console.log(res)
-
+    if (res.request == 'CAPCHA_NOT_READY')
+        setTimeout(async () => {
+            await getCaptcha(apiKey, requestId)
+        }, 1000);
     // .then((res) => {
     //     res.json().then((result) => {
     //         console.log(result.request)
