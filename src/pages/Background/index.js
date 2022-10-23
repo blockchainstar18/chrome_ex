@@ -40,7 +40,7 @@ const getCaptcha = async (apiKey, requestId) => {
 
 
 chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
-    if (message === 'reCaptcha') {
+    if (message.message === 'reCaptcha') {
         const apiKey = '81ed890586ac7da086f41aba2c328f86'
         const siteKey = '6LeMrv8ZAAAAAIcvo5HKvdj1lxtUdHnS13jUCulQ'
         const pageUrl = 'https://play.hbomax.com/signIn'
