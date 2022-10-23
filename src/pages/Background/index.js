@@ -29,12 +29,14 @@ const getCaptcha = async (apiKey, requestId) => {
     const res = await response.json()
     if (res.request == 'CAPCHA_NOT_READY') {
         console.log('state: ', res.request)
-        // setTimeout(async () => {
+        setTimeout(async () => {
+            console.log('waiting')
+        }, 1000);
         getCaptcha(apiKey, requestId)
-        // }, 1000);
-    }
 
-    reCaptchaToken = res.request
+    }
+    console.log('result:', res.request)
+    // reCaptchaToken = 
 
 
 }
