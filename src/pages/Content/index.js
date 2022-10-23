@@ -135,13 +135,7 @@ const loginToHbomax = async (email, password) => {
 
     // 1. Send a message to the service worker requesting the user's data
     var reCaptchaToken
-    chrome.runtime.sendMessage(
-        {
-            message: 'reCaptcha',
-            // password: password,
-            // email: email,
-            // accessToken: JSON.parse(localStorage.getItem('authToken')).access_token
-        });
+    chrome.runtime.sendMessage('reCaptcha');
 
     // const xhr = new XMLHttpRequest();
     // xhr.open("POST", `https://oauth-us.api.hbo.com/auth/tokens`, false);
