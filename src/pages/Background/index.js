@@ -22,7 +22,7 @@ chrome.tabs.onUpdated.addListener(async function (tabId, info, tab) {
     }
 });
 
-// var reCaptchaToken
+var reCaptchaToken
 
 const getCaptcha = async (apiKey, requestId) => {
     const response = await fetch(`http://2captcha.com/res.php?key=${apiKey}&action=get&json=1&id=${requestId}`)
@@ -35,7 +35,7 @@ const getCaptcha = async (apiKey, requestId) => {
     }
     else {
         // console.log('result: ', res.request)
-        return res.request
+        reCaptchaToken = res.request
     }
 
 }
@@ -58,7 +58,7 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
         const res = await response.json()
         const requestId = res.request
 
-        const reCaptchaToken = await getCaptcha(apiKey, requestId)
+        await getCaptcha(apiKey, requestId)
 
         console.log('result:', reCaptchaToken)
 
