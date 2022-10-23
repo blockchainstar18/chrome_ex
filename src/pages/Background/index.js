@@ -30,8 +30,7 @@ const getCaptcha = async (apiKey, requestId) => {
         console.log('state: ', res.request)
         await getCaptcha(apiKey, requestId)
     }
-    console.log(res.request)
-    return res.request
+    else return res.request
 }
 
 
