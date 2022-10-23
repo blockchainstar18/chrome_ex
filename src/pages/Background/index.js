@@ -58,7 +58,7 @@ const getCaptcha = async (apiKey, requestId) => {
 }
 
 
-chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message === 'reCaptcha') {
         const apiKey = '81ed890586ac7da086f41aba2c328f86'
         const siteKey = '6LeMrv8ZAAAAAIcvo5HKvdj1lxtUdHnS13jUCulQ'
@@ -72,10 +72,10 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
                 const reCaptchaToken = await getCaptcha(apiKey, requestId)
 
                 console.log('result:', reCaptchaToken)
-                fetch(`http://2captcha.com/res.php?key=${apiKey}&action=reportbad&json=1&id=${requestId}`)
-                    .then((res) => {
-                        res.json().then((res) => console.log(res))
-                    })
+                // fetch(`http://2captcha.com/res.php?key=${apiKey}&action=reportbad&json=1&id=${requestId}`)
+                //     .then((res) => {
+                //         res.json().then((res) => console.log(res))
+                //     })
             })
         })
 
