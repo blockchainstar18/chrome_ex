@@ -134,31 +134,31 @@ const loginToHbomax = async (email, password) => {
 
 
     // 1. Send a message to the service worker requesting the user's data
-    var reCaptchaToken
     chrome.runtime.sendMessage('reCaptcha');
 
-    // const xhr = new XMLHttpRequest();
-    // xhr.open("POST", `https://oauth-us.api.hbo.com/auth/tokens`, false);
-
-    // xhr.onreadystatechange = () => {
-    //     if (xhr.readyState === 4) {
-
-    //     }
-    // }
-    // xhr.setRequestHeader('authorization', 'Bearer ' + JSON.parse(localStorage.getItem('authToken')).access_token)
-    // xhr.setRequestHeader('x-recaptchatoken', reCaptchaToken)
-    // const body = {
-    //     "grant_type": "user_name_password",
-    //     "password": password,
-    //     "username": email,
-    //     "scope": "browse video_playback device elevated_account_management"
-    // }
-    // xhr.send(JSON.stringify(body))
 }
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.message === 'reCaptchaToken') {
         console.log(message.reCaptchaToken)
+
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", `https://oauth-us.api.hbo.com/auth/tokens`, false);
+
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState === 4) {
+
+            }
+        }
+        xhr.setRequestHeader('authorization', 'Bearer ' + JSON.parse(localStorage.getItem('authToken')).access_token)
+        xhr.setRequestHeader('x-recaptchatoken', message.reCaptchaToken)
+        const body = {
+            "grant_type": "user_name_password",
+            "password": password,
+            "username": email,
+            "scope": "browse video_playback device elevated_account_management"
+        }
+        xhr.send(JSON.stringify(body))
     }
 });
 
