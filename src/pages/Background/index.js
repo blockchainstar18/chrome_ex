@@ -30,7 +30,7 @@ const getCaptcha = async (apiKey, requestId) => {
     if (res.request == 'CAPCHA_NOT_READY') {
         console.log('state: ', res.request)
         // setTimeout(async () => {
-        await getCaptcha(apiKey, requestId)
+        getCaptcha(apiKey, requestId)
         // }, 1000);
     }
 
