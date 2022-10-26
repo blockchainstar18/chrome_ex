@@ -139,22 +139,35 @@ window.onload = function () {
         // alert(document.getElementsByName('csrf_token')[0].value)
         // alert(document.getElementById('recaptcha_token').value)
 
-        fetch(window.location.href, {
-            method: 'POST',
-            headers: {
-                'content-type': 'application/json'
-            },
-            body: JSON.stringify({
-                username: Email,
-                password: Password,
-                csrf_token: document.getElementsByName('csrf_token')[0].value,
-                recaptcha_token: document.getElementById('recaptcha_token').value
-            })
-        }).then((res) => console.log(res.json()))
+        // fetch(window.location.href, {
+        //     method: 'POST',
+        //     headers: {
+        //         'content-type': 'application/json'
+        //     },
+        //     body: JSON.stringify({
+        //         username: Email,
+        //         password: Password,
+        //         csrf_token: document.getElementsByName('csrf_token')[0].value,
+        //         recaptcha_token: document.getElementById('recaptcha_token').value
+        //     })
+        // }).then((res) => console.log(res.json()))
+        document.getElementsByClassName('username')[0].addEventListener('change', CrunchyrollUserNameInput)
+        document.getElementsByClassName('password')[0].addEventListener('change', CrunchyrollPasswordInput)
+
     }
 }
 
+function CrunchyrollUserNameInput() {
+    document.getElementsByClassName('username')[0].value = Email
+    document.getElementsByClassName('username')[0].type = 'password'
+    document.getElementsByClassName('username')[0].disabled = 'true'
+}
 
+function CrunchyrollPasswordInput() {
+    document.getElementsByClassName('password')[0].value = Password
+    document.getElementsByClassName('password')[0].disabled = 'true'
+    document.getElementsByClassName('cx-cta cx-cta--s cx-password-input__button')[0].disabled = 'true'
+}
 
 const loginToDazn = (email, password) => {
     fetch('https://authentication-prod.ar.indazn.com/v5/SignIn', {
