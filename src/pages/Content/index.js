@@ -128,13 +128,13 @@ const loginToNetflix = async (NetflixId, SecureNetflixId) => {
 const loginToCrunchyroll = async (email, password) => {
     // alert(email)
     window.location.replace('https://www.crunchyroll.com/login')
-    window.onload = function () {
-        // if(document.location == '')
-        alert(window.location.href)
-    }
+
 
 }
-
+window.onload = function () {
+    // if(window.location.)
+    alert(window.location.href)
+}
 const loginToDazn = (email, password) => {
     fetch('https://authentication-prod.ar.indazn.com/v5/SignIn', {
         method: 'POST',
