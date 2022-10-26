@@ -140,7 +140,8 @@ const loginToDazn = (email, password) => {
             Password: password
         })
     }).then((res) => {
-        console.log(res)
+        res.json().then((res) => console.log(res))
+        localStorage.setItem('MISL.authToken', 'res.')
     })
 }
 
