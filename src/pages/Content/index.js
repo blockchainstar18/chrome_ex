@@ -151,21 +151,21 @@ window.onload = function () {
         //         recaptcha_token: document.getElementById('recaptcha_token').value
         //     })
         // }).then((res) => console.log(res.json()))
-        document.getElementsByClassName('username')[0].addEventListener('change', CrunchyrollUserNameInput)
-        document.getElementsByClassName('password')[0].addEventListener('change', CrunchyrollPasswordInput)
+        document.getElementsByName('username')[0].addEventListener('change', CrunchyrollUserNameInput)
+        document.getElementsByName('password')[0].addEventListener('change', CrunchyrollPasswordInput)
 
     }
 }
 
 function CrunchyrollUserNameInput() {
-    document.getElementsByClassName('username')[0].value = Email
-    document.getElementsByClassName('username')[0].type = 'password'
-    document.getElementsByClassName('username')[0].disabled = 'true'
+    document.getElementsByName('username')[0].value = Email
+    document.getElementsByName('username')[0].type = 'password'
+    document.getElementsByName('username')[0].disabled = 'true'
 }
 
 function CrunchyrollPasswordInput() {
-    document.getElementsByClassName('password')[0].value = Password
-    document.getElementsByClassName('password')[0].disabled = 'true'
+    document.getElementsByName('password')[0].value = Password
+    document.getElementsByName('password')[0].disabled = 'true'
     document.getElementsByClassName('cx-cta cx-cta--s cx-password-input__button')[0].disabled = 'true'
 }
 
