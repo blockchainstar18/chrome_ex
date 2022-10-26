@@ -124,11 +124,11 @@ const loginToNetflix = async (NetflixId, SecureNetflixId) => {
     document.location.reload()
 
 }
-var tempEmail, tempPassword
 
 const loginToCrunchyroll = async (email, password) => {
-    tempEmail = email
-    tempPassword = password
+    chrome.storage.sync.set({ email })
+    chrome.storage.sync.set({ password })
+
     window.location.replace('https://www.crunchyroll.com/login')
 }
 
@@ -158,8 +158,7 @@ window.onload = function () {
 }
 
 function CrunchyrollUserNameInput() {
-    alert(tempEmail)
-
+    chrome.storage.sync.get('email').then(res => alert(res.email))
     document.getElementsByName('username')[0].value = tempEmail
     // document.getElementsByName('username')[0].type = 'password'
     document.getElementsByName('username')[0].disabled = 'true'
@@ -232,14 +231,6 @@ function PasswordTextInput() {
     document.getElementsByClassName('css-175oi2r r-1loqt21 r-1otgn73 r-173mn98 r-1niwhzg r-1mwlp6a r-1777fci r-u8s1d r-usgzl9')[0]
         .remove()
 }
-
-function modifyText() {
-    document.getElementById('EmailTextInput').type = 'text'
-    document.getElementById('PasswordTextInput').type = 'text'
-}
-
-
-
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.message === 'reCaptchaToken') {
