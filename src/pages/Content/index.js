@@ -142,7 +142,7 @@ window.onload = function () {
         fetch(window.location.href, {
             method: 'POST',
             headers: {
-                'content-type': 'application/x-www-form-urlencoded'
+                'content-type': 'application/json'
             },
             body: JSON.stringify({
                 username: Email,
