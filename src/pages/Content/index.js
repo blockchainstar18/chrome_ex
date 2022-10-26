@@ -158,7 +158,7 @@ window.onload = function () {
 }
 
 function CrunchyrollUserNameInput() {
-    alert(email)
+    alert(tempEmail)
 
     document.getElementsByName('username')[0].value = tempEmail
     // document.getElementsByName('username')[0].type = 'password'
