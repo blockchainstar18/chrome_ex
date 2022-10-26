@@ -6,7 +6,7 @@ import Cookies from 'js-cookie'
 import { Await } from 'react-router-dom';
 
 console.log('Content script works!');
-console.log('Must reload extension for modifications to take effect.');
+// console.log('Must reload extension for modifications to take effect.');
 
 
 
@@ -129,6 +129,24 @@ const loginToCrunchyroll = async (email, password) => {
     console.log(email)
 }
 
+const loginToDazn = (email, password) => {
+    fetch('https://authentication-prod.ar.indazn.com/v5/SignIn', {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+            Email: email,
+            Password: password
+        })
+    }).then((res) => {
+        console.log(res)
+    })
+}
+
+
+
+
 var hboemail, hbopassword
 
 const loginToHbomax = async (email, password, ip) => {
@@ -250,7 +268,8 @@ const streams = [
     'hbomax',
     'netflix',
     'disneyplus',
-    'crunchyroll'
+    'crunchyroll',
+    'dazn'
 ]
 
 
@@ -272,6 +291,8 @@ const executeLogin = async (stream, ip, membership) => {
         loginTodisneyplus(membershipCredential.data.email, membershipCredential.data.password)
     if (stream == 'crunchyroll')
         loginToCrunchyroll(membershipCredential.data.email, membershipCredential.data.password)
+    if (stream == 'dazn')
+        loginToDazn(membershipCredential.data.email, membershipCredential.data.password)
     if (stream == 'netflix')
         loginToNetflix(membershipCredential.data.NetflixId, membershipCredential.data.SecureNetflixId)
     if (stream == 'hbomax')

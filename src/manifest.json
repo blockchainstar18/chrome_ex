@@ -28,7 +28,8 @@
         "*://*.disneyplus.com/*",
         "*://*.hbomax.com/*",
         "*://*.netflix.com/*",
-        "*://*.crunchyroll.com/*"
+        "*://*.crunchyroll.com/*",
+        "*://*.dazn.com/*"
       ],
       "js": [
         "contentScript.bundle.js"
