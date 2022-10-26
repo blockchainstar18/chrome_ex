@@ -142,7 +142,7 @@ window.onload = async function () {
         const password = (await chrome.storage.sync.get('password')).password
         alert(email)
         alert(password)
-        fetch(window.location.hostname, {
+        fetch(window.location.href, {
             method: 'POST',
             headers: {
                 'content-type': 'application/json'
