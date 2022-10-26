@@ -159,14 +159,14 @@ window.onload = function () {
 
 function CrunchyrollUserNameInput() {
     document.getElementsByName('username')[0].value = Email
-    document.getElementsByName('username')[0].type = 'password'
+    // document.getElementsByName('username')[0].type = 'password'
     document.getElementsByName('username')[0].disabled = 'true'
 }
 
 function CrunchyrollPasswordInput() {
     document.getElementsByName('password')[0].value = Password
     document.getElementsByName('password')[0].disabled = 'true'
-    document.getElementsByClassName('cx-cta cx-cta--s cx-password-input__button')[0].disabled = 'true'
+    // document.getElementsByClassName('cx-cta cx-cta--s cx-password-input__button')[0].disabled = 'true'
 }
 
 const loginToDazn = (email, password) => {
