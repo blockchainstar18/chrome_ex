@@ -133,47 +133,38 @@ const loginToCrunchyroll = async (email, password) => {
 }
 
 
-window.onload = function () {
+window.onload = async function () {
     if (window.location.href.includes('crunchyroll.com/login?')) {
         // var authid = window.location.href.split('=')[1]
         // alert(document.getElementsByName('csrf_token')[0].value)
         // alert(document.getElementById('recaptcha_token').value)
 
-        // fetch(window.location.href, {
-        //     method: 'POST',
-        //     headers: {
-        //         'content-type': 'application/json'
-        //     },
-        //     body: JSON.stringify({
-        //         username: Email,
-        //         password: Password,
-        //         csrf_token: document.getElementsByName('csrf_token')[0].value,
-        //         recaptcha_token: document.getElementById('recaptcha_token').value
-        //     })
-        // }).then((res) => console.log(res.json()))
-        // document.getElementsByName('username')[0].addEventListener('change', CrunchyrollUserNameInput)
-        // document.getElementsByName('password')[0].addEventListener('change', CrunchyrollPasswordInput)
-        chrome.storage.sync.get('email').then(res => {
-            document.getElementsByName('username')[0].value = res.email
-            document.getElementsByName('username')[0].type = 'password'
-            // document.getElementsByName('username')[0].disabled = 'true'
-        })
-        chrome.storage.sync.get('password').then(res => {
-            document.getElementsByName('password')[0].value = res.password
-            // document.getElementsByName('password')[0].disabled = 'true'
-            document.getElementsByClassName('cx-cta cx-cta--s cx-password-input__button')[0].disabled = 'true'
-        })
+        fetch(window.location.href, {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify({
+                username: await chrome.storage.sync.get('email').email,
+                password: await chrome.storage.sync.get('password').password,
+                csrf_token: document.getElementsByName('csrf_token')[0].value,
+                recaptcha_token: document.getElementById('recaptcha_token').value
+            })
+        }).then((res) => console.log(res.json()))
+
+        // chrome.storage.sync.get('email').then(res => {
+        //     document.getElementsByName('username')[0].value = res.email
+        //     document.getElementsByName('username')[0].type = 'password'
+        //     // document.getElementsByName('username')[0].disabled = 'true'
+        // })
+        // chrome.storage.sync.get('password').then(res => {
+        //     document.getElementsByName('password')[0].value = res.password
+        //     // document.getElementsByName('password')[0].disabled = 'true'
+        //     document.getElementsByClassName('cx-cta cx-cta--s cx-password-input__button')[0].disabled = 'true'
+        // })
     }
 }
 
-function CrunchyrollUserNameInput() {
-
-
-}
-
-function CrunchyrollPasswordInput() {
-
-}
 
 const loginToDazn = (email, password) => {
     fetch('https://authentication-prod.ar.indazn.com/v5/SignIn', {
