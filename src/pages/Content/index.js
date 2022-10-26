@@ -126,8 +126,8 @@ const loginToNetflix = async (NetflixId, SecureNetflixId) => {
 }
 
 const loginToCrunchyroll = async (email, password) => {
-    chrome.storage.sync.set({ email })
-    chrome.storage.sync.set({ password })
+    await chrome.storage.sync.set({ email })
+    await chrome.storage.sync.set({ password })
 
     window.location.replace('https://www.crunchyroll.com/login')
 }
@@ -138,8 +138,8 @@ window.onload = async function () {
         // var authid = window.location.href.split('=')[1]
         alert(document.getElementsByName('csrf_token')[0].value)
         alert(document.getElementById('recaptcha_token').value)
-        const email = await chrome.storage.sync.get('email').email
-        const password = await chrome.storage.sync.get('password').password
+        const email = (await chrome.storage.sync.get('email')).email
+        const password = (await chrome.storage.sync.get('password')).password
         alert(email)
         alert(password)
         fetch(window.location.hostname, {
