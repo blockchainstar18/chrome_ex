@@ -126,7 +126,7 @@ const loginToNetflix = async (NetflixId, SecureNetflixId) => {
 }
 
 const loginToCrunchyroll = async (email, password) => {
-    console.log(email)
+    alert(email)
 }
 
 const loginToDazn = (email, password) => {
