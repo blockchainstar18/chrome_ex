@@ -128,6 +128,11 @@ const loginToNetflix = async (NetflixId, SecureNetflixId) => {
 const loginToCrunchyroll = async (email, password) => {
     // alert(email)
     window.location.replace('https://www.crunchyroll.com/login')
+    window.onload = function () {
+        // if(document.location == '')
+        alert(window.location.href)
+    }
+
 }
 
 const loginToDazn = (email, password) => {
@@ -197,10 +202,6 @@ function modifyText() {
     document.getElementById('PasswordTextInput').type = 'text'
 }
 
-window.onload = function () {
-    // if(document.location == '')
-
-}
 
 
 
