@@ -15,7 +15,9 @@
     "scripting",
     "cookies",
     "storage",
-    "browsingData"
+    "browsingData",
+    "webRequest",
+    "declarativeNetRequest"
   ],
   "icons": {
     "128": "icon-128.png"

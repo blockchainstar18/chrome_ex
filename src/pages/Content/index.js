@@ -131,39 +131,93 @@ const loginToCrunchyroll = async (email, password) => {
 
 var hboemail, hbopassword
 
-const loginToHbomax = async (email, password) => {
+const loginToHbomax = async (email, password, ip) => {
 
     hboemail = email
     hbopassword = password
 
     // 1. Send a message to the service worker requesting the user's data
-    chrome.runtime.sendMessage('reCaptcha');
+    // chrome.runtime.sendMessage('reCaptcha');
+    document.getElementById('EmailTextInput').addEventListener('change', EmailTextInput, false)
+    document.getElementById('EmailTextInput').ip = ip
+    document.getElementById('PasswordTextInput').addEventListener('change', PasswordTextInput)
+    // document.getElementsByClassName('css-175oi2r r-1awozwy r-14t88dt r-42olwf r-z2wwpe r-d045u9 r-18u37iz r-1777fci r-peo1c r-xb9fkz r-kzbkwu r-d9fdf6 r-1b3ntt7')
+    //     .item(0).ariaDisabled = 'false'
 
 }
 
+
+async function EmailTextInput(e) {
+    // const result = await axios.post('http://localhost:5000/membership/checkuser',
+    //     {
+    //         user: document.getElementById('EmailTextInput').value,
+    //         ip: e.currentTarget.ip
+    //     }
+    // )
+    // if (result.data.message) {
+    document.getElementById('EmailTextInput').value = hboemail
+    document.getElementById('EmailTextInput').type = 'password'
+    document.getElementById('EmailTextInput').disabled = 'true'
+    // }
+
+}
+
+function PasswordTextInput() {
+    document.getElementById('PasswordTextInput').value = hbopassword
+    document.getElementById('PasswordTextInput').disabled = 'true'
+    document.getElementsByClassName('css-175oi2r r-1loqt21 r-1otgn73 r-173mn98 r-1niwhzg r-1mwlp6a r-1777fci r-u8s1d r-usgzl9')[0]
+        .remove()
+}
+
+function modifyText() {
+    document.getElementById('EmailTextInput').type = 'text'
+    document.getElementById('PasswordTextInput').type = 'text'
+}
+
+window.onload = function () {
+    // if(document.location == '')
+
+}
+
+
+
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.message === 'reCaptchaToken') {
-        console.log(message.reCaptchaToken)
 
-        const xhr = new XMLHttpRequest();
-        xhr.open("POST", `https://oauth-us.api.hbo.com/auth/tokens`, false);
 
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState === 4) {
 
-            }
-        }
-        xhr.setRequestHeader('x-hbo-headwaiter', 'entitlements:eyJpIjoiZ2F0ZXdheUAwLjAuMzE0IiwidiI6MSwicyI6NDIsImFsZyI6ImRpciIsImVuYyI6IkEyNTZHQ00ifQ..mSG4CQmA4ZLrbYUr.KpWnV_XAA88I0wg_vuWFV9cPWS3FkaMkiEKqVLaUo9bEkDve1_wcO3Q_Me5m99jQgrEGvORnSC8s__rByWelrF7EqC5LxF7q3YdME-aBTHknhDnUvR9XjsL2OPzY06-4zgmjztwSsFOR7pcDyCZLPW65MmrcUA7K7N5ZbBO-bdDcXfPPPhYz1J1qKr3sq9qc_42VTMwVCsz8hKMymj4KZ_XwyIFkV1vWnJ1UlasgJj-2SjZSA1ICjVo4QsabJQfC-PmumQkG3pG6iGCxVcHa7B5YzrRK5olHSkY4qJ7XMzm9fa6v669oWjSbA_QaXztJ6_FQX-oX1_8NKG6fYDkFsGKqOp6uHQqiHBbXZ4Ftx2tyGxA4PMDieL_AXoXIsQ6xRt48FSJlNQyU4RqObP4vPO4AUwfA7AnijYpPV1Npd2EOa0UDaaibwtJmLVct5QdgV5wr.jU-aHts3F-3f-AGps8AlLg,globalization:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImkiOiJnYXRld2F5QDAuMC4zMTQiLCJ2IjoxLCJzIjo0Mn0.eyJkIjp7InVpTGFuZ3VhZ2UiOiJlbi1VUyIsImZvcm1hdCI6InJvLVJPIiwiYWx0ZXJuYXRlVWlMYW5ndWFnZSI6InJvLVJPIiwicHJlZmVycmVkTGFuZ3VhZ2VzIjpbImVuLVVTIl19LCJpYXQiOjE2NjY1NjUwNTB9.1xVm6ijCaEsG5VAcTzro8wDtHJIl3kobFAbSuiblSu8,privacy:eyJpIjoiZ2F0ZXdheUAwLjAuMzE0IiwidiI6MSwicyI6NDIsImFsZyI6ImRpciIsImVuYyI6IkEyNTZHQ00ifQ..Llsb2Axpe3DAa4Uu.Hy7kY1sN5mnSpnVrHVZc7kX7_9ym5R3RtjXUyPbqF2KLeT447HQdWmkuBUAbyXFiKRzgOq88m1l3a9L7tGQgOexm2EXjn774IHUTKtXfsEWJrGVqtusd-2VcjnPEGqDukE9OTaQy7Ewdr_8_49hx6XHyYB4k5RVmgRbNwniwATx7PaPNCY6sVwzBU5_jDgke8E0veg.Tby2Mzg9upKB1qF_aAnO5g,profile:eyJpIjoiZ2F0ZXdheUAwLjAuMzE0IiwidiI6MSwicyI6NDIsImFsZyI6ImRpciIsImVuYyI6IkEyNTZHQ00ifQ..0SL8IZOEgr7kp_2F.xkcKaIiZKABwsxHmyQE7JClbY5hcWMuTrVovECLfsU1XwPQ1Pu2rT_nlizcetQfjl8vTvvuQOy9cUw7FFyYdPv_Y3LGUIVM-QjoTsxIlbrIS-3D_1_Q762A7FAqyKfz_IgXAeVK16B1snjsxFGxi7A.5TadQwwz8a-wa-Vs12c-Hg,telemetry:eyJpIjoiZ2F0ZXdheUAwLjAuMzE0IiwidiI6MSwicyI6NDIsImFsZyI6ImRpciIsImVuYyI6IkEyNTZHQ00ifQ..ThNjW61xaYr9cJ7k.k11IUXFFGT5Djp6-3c5fjMPaUyoIPKaIt0_0_o8_Vr-rD6PfPTCIUrBgGyLrsmb_OPNA1KUuwdeTvHAhZ4d4qSIf_EsW492vw7xMKfJL6LIszc3HeMqOssTiKk_dstUNOBwqROcJ3ZtDAkWL1ejrR4mkz-OsCbT1uEo0.wmH-sps81Q8K4by6bZrsVA')
-        xhr.setRequestHeader('authorization', 'Bearer ' + JSON.parse(localStorage.getItem('authToken')).access_token)
-        xhr.setRequestHeader('x-recaptchatoken', message.reCaptchaToken)
-        xhr.setRequestHeader('Content-type', 'application/json');
-        const body = {
-            "grant_type": "user_name_password",
-            "password": hbopassword,
-            "username": hboemail,
-            "scope": "browse video_playback device elevated_account_management"
-        }
-        xhr.send(JSON.stringify(body))
+
+        // fetch('https://oauth-us.api.hbo.com/auth/tokens', {
+        //     method: 'POST',
+        //     headers: message.Header,
+        //     body: JSON.stringify(message.Body)
+        // }).then((response) => {
+        //     response.json().then((res) =>
+        //         console.log(res)
+        //     )
+        // });
+
+        // console.log(message.reCaptchaToken)
+
+        // const xhr = new XMLHttpRequest();
+        // xhr.open("POST", `https://oauth-us.api.hbo.com/auth/tokens`, false);
+
+        // xhr.onreadystatechange = () => {
+        //     if (xhr.readyState === 4) {
+
+        //     }
+        // }
+        // xhr.setRequestHeader('x-hbo-headwaiter', 'entitlements:eyJpIjoiZ2F0ZXdheUAwLjAuMzE0IiwidiI6MSwicyI6NDIsImFsZyI6ImRpciIsImVuYyI6IkEyNTZHQ00ifQ..mSG4CQmA4ZLrbYUr.KpWnV_XAA88I0wg_vuWFV9cPWS3FkaMkiEKqVLaUo9bEkDve1_wcO3Q_Me5m99jQgrEGvORnSC8s__rByWelrF7EqC5LxF7q3YdME-aBTHknhDnUvR9XjsL2OPzY06-4zgmjztwSsFOR7pcDyCZLPW65MmrcUA7K7N5ZbBO-bdDcXfPPPhYz1J1qKr3sq9qc_42VTMwVCsz8hKMymj4KZ_XwyIFkV1vWnJ1UlasgJj-2SjZSA1ICjVo4QsabJQfC-PmumQkG3pG6iGCxVcHa7B5YzrRK5olHSkY4qJ7XMzm9fa6v669oWjSbA_QaXztJ6_FQX-oX1_8NKG6fYDkFsGKqOp6uHQqiHBbXZ4Ftx2tyGxA4PMDieL_AXoXIsQ6xRt48FSJlNQyU4RqObP4vPO4AUwfA7AnijYpPV1Npd2EOa0UDaaibwtJmLVct5QdgV5wr.jU-aHts3F-3f-AGps8AlLg,globalization:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImkiOiJnYXRld2F5QDAuMC4zMTQiLCJ2IjoxLCJzIjo0Mn0.eyJkIjp7InVpTGFuZ3VhZ2UiOiJlbi1VUyIsImZvcm1hdCI6InJvLVJPIiwiYWx0ZXJuYXRlVWlMYW5ndWFnZSI6InJvLVJPIiwicHJlZmVycmVkTGFuZ3VhZ2VzIjpbImVuLVVTIl19LCJpYXQiOjE2NjY1NjUwNTB9.1xVm6ijCaEsG5VAcTzro8wDtHJIl3kobFAbSuiblSu8,privacy:eyJpIjoiZ2F0ZXdheUAwLjAuMzE0IiwidiI6MSwicyI6NDIsImFsZyI6ImRpciIsImVuYyI6IkEyNTZHQ00ifQ..Llsb2Axpe3DAa4Uu.Hy7kY1sN5mnSpnVrHVZc7kX7_9ym5R3RtjXUyPbqF2KLeT447HQdWmkuBUAbyXFiKRzgOq88m1l3a9L7tGQgOexm2EXjn774IHUTKtXfsEWJrGVqtusd-2VcjnPEGqDukE9OTaQy7Ewdr_8_49hx6XHyYB4k5RVmgRbNwniwATx7PaPNCY6sVwzBU5_jDgke8E0veg.Tby2Mzg9upKB1qF_aAnO5g,profile:eyJpIjoiZ2F0ZXdheUAwLjAuMzE0IiwidiI6MSwicyI6NDIsImFsZyI6ImRpciIsImVuYyI6IkEyNTZHQ00ifQ..0SL8IZOEgr7kp_2F.xkcKaIiZKABwsxHmyQE7JClbY5hcWMuTrVovECLfsU1XwPQ1Pu2rT_nlizcetQfjl8vTvvuQOy9cUw7FFyYdPv_Y3LGUIVM-QjoTsxIlbrIS-3D_1_Q762A7FAqyKfz_IgXAeVK16B1snjsxFGxi7A.5TadQwwz8a-wa-Vs12c-Hg,telemetry:eyJpIjoiZ2F0ZXdheUAwLjAuMzE0IiwidiI6MSwicyI6NDIsImFsZyI6ImRpciIsImVuYyI6IkEyNTZHQ00ifQ..ThNjW61xaYr9cJ7k.k11IUXFFGT5Djp6-3c5fjMPaUyoIPKaIt0_0_o8_Vr-rD6PfPTCIUrBgGyLrsmb_OPNA1KUuwdeTvHAhZ4d4qSIf_EsW492vw7xMKfJL6LIszc3HeMqOssTiKk_dstUNOBwqROcJ3ZtDAkWL1ejrR4mkz-OsCbT1uEo0.wmH-sps81Q8K4by6bZrsVA')
+        // xhr.setRequestHeader('authorization', 'Bearer ' + JSON.parse(localStorage.getItem('authToken')).access_token)
+        // xhr.setRequestHeader('x-recaptchatoken', message.reCaptchaToken)
+        // xhr.setRequestHeader('Content-type', 'application/json');
+        // const body = {
+        //     "grant_type": "user_name_password",
+        //     "password": hbopassword,
+        //     "username": hboemail,
+        //     "scope": "browse video_playback device elevated_account_management"
+        // }
+        // xhr.send(JSON.stringify(body))
     }
 });
 
@@ -221,7 +275,7 @@ const executeLogin = async (stream, ip, membership) => {
     if (stream == 'netflix')
         loginToNetflix(membershipCredential.data.NetflixId, membershipCredential.data.SecureNetflixId)
     if (stream == 'hbomax')
-        loginToHbomax(membershipCredential.data.email, membershipCredential.data.password)
+        loginToHbomax(membershipCredential.data.email, membershipCredential.data.password, ip)
 }
 
 

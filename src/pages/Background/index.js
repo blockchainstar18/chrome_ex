@@ -1,3 +1,76 @@
+console.log('backgroundScript works')
+
+
+
+
+// chrome.declarativeNetRequest.updateEnabledRulesets({
+//     disableRulesetIds: ['1001']
+// })
+var headers = []
+var form
+var flag = false
+
+
+// chrome.declarativeNetRequest.updateDynamicRules({
+//     addRules: [{
+//         'id': 1001,
+//         'priority': 1,
+//         'action': {
+//             'type': 'block'
+//         },
+//         'condition': {
+//             'urlFilter': 'hbomax.com',
+//             'resourceTypes': [
+//                 'csp_report', 'font', 'image', 'main_frame', 'media', 'object', 'other', 'ping', 'script',
+//                 'stylesheet', 'sub_frame', 'webbundle', 'websocket', 'webtransport', 'xmlhttprequest'
+//             ]
+//         }
+//     }], removeRuleIds: [1001]
+// })
+
+
+chrome.webRequest.onBeforeRequest.addListener(
+    function (details) {
+        if (details.url == 'https://oauth-us.api.hbo.com/auth/tokens' && !flag && details.method == 'POST') {
+            var dec = new TextDecoder()
+            form = JSON.parse(dec.decode(details.requestBody.raw[0].bytes))
+            form.username = 'rolexluis@gmail.com'
+            form.password = 'Itzel2312'
+            console.log('BeforeRequest')
+        }
+    },
+    { urls: ["<all_urls>"] },
+    ["requestBody"]
+);
+
+
+chrome.webRequest.onBeforeSendHeaders.addListener(
+    function (details) {
+        if (details.url == 'https://oauth-us.api.hbo.com/auth/tokens' && !flag && details.method == 'POST') {
+            flag = true
+            headers = details.requestHeaders
+
+            var Header = {}
+            headers.forEach((header) => {
+                Header[header.name] = header.value
+            })
+            console.log('BeforeSendHeader')
+
+            chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+                chrome.tabs.sendMessage(tabs[0].id, { message: 'reCaptchaToken', Header: Header, Body: form });
+            });
+
+
+        }
+    },
+    { urls: ["<all_urls>"] },
+    ["requestHeaders"]
+)
+
+
+
+
+
 chrome.tabs.onUpdated.addListener(async function (tabId, info, tab) {
     if (info.status === 'complete') {
         // your code ...
@@ -59,3 +132,4 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
         });
     }
 });
+
