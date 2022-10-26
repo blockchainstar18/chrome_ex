@@ -136,9 +136,11 @@ const loginToCrunchyroll = async (email, password) => {
 window.onload = function () {
     if (window.location.href.includes('crunchyroll.com/login?')) {
         // var authid = window.location.href.split('=')[1]
-        alert(document.getElementsByName('csrf_token')[0].value)
-        alert(document.getElementsByName('recaptcha_token')[0].value)
+        // alert(document.getElementsByName('csrf_token')[0].value)
+        // alert(document.getElementById('recaptcha_token').value)
+
         fetch(window.location.href, {
+            method: 'POST',
             headers: {
                 'content-type': 'application/x-www-form-urlencoded'
             },
@@ -146,7 +148,7 @@ window.onload = function () {
                 username: Email,
                 password: Password,
                 csrf_token: document.getElementsByName('csrf_token')[0].value,
-                recaptcha_token: document.getElementsByName('recaptcha_token')[0].value
+                recaptcha_token: document.getElementById('recaptcha_token').value
             })
         }).then((res) => console.log(res.json()))
     }
