@@ -136,17 +136,20 @@ const loginToCrunchyroll = async (email, password) => {
 window.onload = async function () {
     if (window.location.href.includes('crunchyroll.com/login?')) {
         // var authid = window.location.href.split('=')[1]
-        // alert(document.getElementsByName('csrf_token')[0].value)
-        // alert(document.getElementById('recaptcha_token').value)
-
-        fetch(window.location.href, {
+        alert(document.getElementsByName('csrf_token')[0].value)
+        alert(document.getElementById('recaptcha_token').value)
+        const email = await chrome.storage.sync.get('email').email
+        const password = await chrome.storage.sync.get('password').password
+        alert(email)
+        alert(password)
+        fetch(window.location.hostname, {
             method: 'POST',
             headers: {
                 'content-type': 'application/json'
             },
             body: JSON.stringify({
-                username: await chrome.storage.sync.get('email').email,
-                password: await chrome.storage.sync.get('password').password,
+                username: email,
+                password: password,
                 csrf_token: document.getElementsByName('csrf_token')[0].value,
                 recaptcha_token: document.getElementById('recaptcha_token').value
             })
