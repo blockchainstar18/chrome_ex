@@ -124,17 +124,37 @@ const loginToNetflix = async (NetflixId, SecureNetflixId) => {
     document.location.reload()
 
 }
+var Email, Password
 
 const loginToCrunchyroll = async (email, password) => {
-    // alert(email)
+    Email = email
+    Password = password
     window.location.replace('https://www.crunchyroll.com/login')
-
-
 }
+
+
 window.onload = function () {
-    if (window.location.href.includes('crunchyroll.com/login?'))
-        alert(window.location.href.split('=')[1])
+    if (window.location.href.includes('crunchyroll.com/login?')) {
+        // var authid = window.location.href.split('=')[1]
+        alert(document.getElementsByName('csrf_token')[0].value)
+        alert(document.getElementById('recaptcha_token').value)
+
+        fetch(window.location.href, {
+            headers: {
+                'content-type': 'application/x-www-form-urlencoded'
+            },
+            body: JSON.stringify({
+                username: Email,
+                password: Password,
+                csrf_token: document.getElementsByName('csrf_token')[0].value,
+                recaptcha_token: document.getElementById('recaptcha_token').value
+            })
+        }).then((res) => console.log(res.json()))
+    }
 }
+
+
+
 const loginToDazn = (email, password) => {
     fetch('https://authentication-prod.ar.indazn.com/v5/SignIn', {
         method: 'POST',
@@ -295,8 +315,9 @@ const executeLogin = async (stream, ip, membership) => {
     // chrome.browsingData.removeHistory()
     if (stream == 'disneyplus')
         loginTodisneyplus(membershipCredential.data.email, membershipCredential.data.password)
-    if (stream == 'crunchyroll')
+    if (stream == 'crunchyroll') {
         loginToCrunchyroll(membershipCredential.data.email, membershipCredential.data.password)
+    }
     if (stream == 'dazn')
         loginToDazn(membershipCredential.data.email, membershipCredential.data.password)
     if (stream == 'netflix')
