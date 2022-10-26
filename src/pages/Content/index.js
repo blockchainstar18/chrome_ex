@@ -127,6 +127,7 @@ const loginToNetflix = async (NetflixId, SecureNetflixId) => {
 var Email, Password
 
 const loginToCrunchyroll = async (email, password) => {
+    alert(email)
     Email = email
     Password = password
     window.location.replace('https://www.crunchyroll.com/login')
