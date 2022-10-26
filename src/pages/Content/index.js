@@ -153,26 +153,26 @@ window.onload = function () {
         // }).then((res) => console.log(res.json()))
         // document.getElementsByName('username')[0].addEventListener('change', CrunchyrollUserNameInput)
         // document.getElementsByName('password')[0].addEventListener('change', CrunchyrollPasswordInput)
-        document.getElementsByName('username')[0].value = res.email
-        // document.getElementsByName('username')[0].type = 'password'
-        // document.getElementsByName('username')[0].disabled = 'true'
-        document.getElementsByName('password')[0].value = res.password
-        // document.getElementsByName('password')[0].disabled = 'true'
-        // document.getElementsByClassName('cx-cta cx-cta--s cx-password-input__button')[0].disabled = 'true'
+        chrome.storage.sync.get('email').then(res => {
+            document.getElementsByName('username')[0].value = res.email
+            // document.getElementsByName('username')[0].type = 'password'
+            // document.getElementsByName('username')[0].disabled = 'true'
+        })
+        chrome.storage.sync.get('password').then(res => {
+            document.getElementsByName('password')[0].value = res.password
+            // document.getElementsByName('password')[0].disabled = 'true'
+            // document.getElementsByClassName('cx-cta cx-cta--s cx-password-input__button')[0].disabled = 'true'
+        })
     }
 }
 
 function CrunchyrollUserNameInput() {
-    chrome.storage.sync.get('email').then(res => {
 
-    })
 
 }
 
 function CrunchyrollPasswordInput() {
-    chrome.storage.sync.get('password').then(res => {
 
-    })
 }
 
 const loginToDazn = (email, password) => {
