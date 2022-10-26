@@ -132,8 +132,8 @@ const loginToCrunchyroll = async (email, password) => {
 
 }
 window.onload = function () {
-    // if(window.location.)
-    alert(window.location.href)
+    if (window.location.href.includes('crunchyroll.com/login?'))
+        alert(window.location.href.split('=')[1])
 }
 const loginToDazn = (email, password) => {
     fetch('https://authentication-prod.ar.indazn.com/v5/SignIn', {
