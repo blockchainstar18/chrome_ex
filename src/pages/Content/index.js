@@ -161,7 +161,7 @@ function CrunchyrollUserNameInput() {
     chrome.storage.sync.get('email').then(res => {
         document.getElementsByName('username')[0].value = res.email
         // document.getElementsByName('username')[0].type = 'password'
-        document.getElementsByName('username')[0].disabled = 'true'
+        // document.getElementsByName('username')[0].disabled = 'true'
     })
 
 }
