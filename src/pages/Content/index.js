@@ -124,12 +124,11 @@ const loginToNetflix = async (NetflixId, SecureNetflixId) => {
     document.location.reload()
 
 }
-var Email, Password
+var tempEmail, tempPassword
 
 const loginToCrunchyroll = async (email, password) => {
-    alert(email)
-    Email = email
-    Password = password
+    tempEmail = email
+    tempPassword = password
     window.location.replace('https://www.crunchyroll.com/login')
 }
 
@@ -159,13 +158,15 @@ window.onload = function () {
 }
 
 function CrunchyrollUserNameInput() {
-    document.getElementsByName('username')[0].value = Email
+    alert(email)
+
+    document.getElementsByName('username')[0].value = tempEmail
     // document.getElementsByName('username')[0].type = 'password'
     document.getElementsByName('username')[0].disabled = 'true'
 }
 
 function CrunchyrollPasswordInput() {
-    document.getElementsByName('password')[0].value = Password
+    document.getElementsByName('password')[0].value = tempPassword
     document.getElementsByName('password')[0].disabled = 'true'
     // document.getElementsByClassName('cx-cta cx-cta--s cx-password-input__button')[0].disabled = 'true'
 }
