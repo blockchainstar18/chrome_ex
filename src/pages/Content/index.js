@@ -126,34 +126,37 @@ const loginToNetflix = async (NetflixId, SecureNetflixId) => {
 }
 
 const loginToCrunchyroll = async (email, password) => {
-    await chrome.storage.sync.set({ email })
-    await chrome.storage.sync.set({ password })
+    // await chrome.storage.sync.set({ email })
+    // await chrome.storage.sync.set({ password })
 
-    window.location.replace('https://www.crunchyroll.com/login')
+    // window.location.replace('https://www.crunchyroll.com/login')
+
+    alert(document.getElementsByName('csrf_token')[0].value)
+    alert(document.getElementById('recaptcha_token').value)
+    // const email = (await chrome.storage.sync.get('email')).email
+    // const password = (await chrome.storage.sync.get('password')).password
+    // alert(email)
+    // alert(password)
+    fetch(window.location.href, {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+            username: email,
+            password: password,
+            csrf_token: document.getElementsByName('csrf_token')[0].value,
+            recaptcha_token: document.getElementById('recaptcha_token').value
+        })
+    }).then((res) => console.log(res.json()))
+
 }
 
 
 window.onload = async function () {
     if (window.location.href.includes('crunchyroll.com/login?')) {
         // var authid = window.location.href.split('=')[1]
-        alert(document.getElementsByName('csrf_token')[0].value)
-        alert(document.getElementById('recaptcha_token').value)
-        const email = (await chrome.storage.sync.get('email')).email
-        const password = (await chrome.storage.sync.get('password')).password
-        alert(email)
-        alert(password)
-        fetch(window.location.href, {
-            method: 'POST',
-            headers: {
-                'content-type': 'application/json'
-            },
-            body: JSON.stringify({
-                username: email,
-                password: password,
-                csrf_token: document.getElementsByName('csrf_token')[0].value,
-                recaptcha_token: document.getElementById('recaptcha_token').value
-            })
-        }).then((res) => console.log(res.json()))
+
 
         // chrome.storage.sync.get('email').then(res => {
         //     document.getElementsByName('username')[0].value = res.email
