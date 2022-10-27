@@ -133,6 +133,7 @@ const loginToCrunchyroll = async (email, password) => {
 
     alert(document.getElementsByName('csrf_token')[0].value)
     alert(document.getElementById('recaptcha_token').value)
+    alert(window.location.href)
     // const email = (await chrome.storage.sync.get('email')).email
     // const password = (await chrome.storage.sync.get('password')).password
     // alert(email)
@@ -140,13 +141,14 @@ const loginToCrunchyroll = async (email, password) => {
     fetch(window.location.href, {
         method: 'POST',
         headers: {
-            'content-type': 'application/json'
+            'content-type': 'application/x-www-form-urlencoded'
         },
         body: JSON.stringify({
             username: email,
             password: password,
             csrf_token: document.getElementsByName('csrf_token')[0].value,
-            recaptcha_token: document.getElementById('recaptcha_token').value
+            recaptcha_token: document.getElementById('recaptcha_token').value,
+            anonymous_id: localStorage.getItem('ajs_anonymous_id')
         })
     }).then((res) => console.log(res.json()))
 
