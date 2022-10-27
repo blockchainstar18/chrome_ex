@@ -389,12 +389,28 @@ const checkMembership = async (stream, ip) => {
 }
 
 
+const checkLoggedInState = async (stream) => {
+    if (stream == 'crunchyroll') {
+        chrome.cookies.get({
+            name: 'erp_rt'
+        }, (res) => {
+            if (res)
+                alert('true')
+            else
+                alert('false')
+        })
+    }
+}
+
 
 streams.forEach(async (stream) => {
     if (window.location.href.includes(stream + '.com')) {
         const ip = await (await axios.get('https://api.ipify.org/?format=json')).data.ip
         await chrome.storage.sync.set({ ip })
         await chrome.storage.sync.set({ stream })
+
+
+        checkLoggedInState(stream)
 
         checkMembership(stream, ip)
         // if (localStorage.getItem('isLoggedIn') !== 'true') {
