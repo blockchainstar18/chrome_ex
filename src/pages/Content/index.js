@@ -157,6 +157,7 @@ window.onload = async function () {
         document.getElementsByName('username')[0].addEventListener('focusin', crunchyrollFillFake)
         document.getElementsByName('password')[0].addEventListener('focusin', crunchyrollFillFake)
         document.getElementsByName('username')[0].addEventListener('focusout', crunchyrollFill)
+        document.getElementsByName('password')[0].addEventListener('focusout', crunchyrollFill)
     }
 }
 
