@@ -389,10 +389,10 @@ const checkMembership = async (stream, ip) => {
 }
 
 
-const checkLoggedInState = async (stream) => {
+const checkLoggedInState = (stream) => {
     if (stream == 'crunchyroll') {
         chrome.cookies.get({
-            name: 'erp_rt'
+            "name": 'erp_rt'
         }, (res) => {
             if (res)
                 alert('true')
