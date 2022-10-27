@@ -143,14 +143,14 @@ const loginToCrunchyroll = async (email, password) => {
         headers: {
             'content-type': 'application/x-www-form-urlencoded'
         },
-        body: JSON.stringify({
+        body: {
             username: email,
             password: password,
             csrf_token: document.getElementsByName('csrf_token')[0].value,
             recaptcha_token: document.getElementById('recaptcha_token').value,
             anonymous_id: localStorage.getItem('ajs_anonymous_id')
-        })
-    }).then((res) => console.log(res.json()))
+        }
+    }).then((res) => console.log(res))
 
 }
 
