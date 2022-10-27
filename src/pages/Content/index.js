@@ -151,26 +151,29 @@ const loginToCrunchyroll = async (email, password) => {
 
 window.onload = async function () {
     if (window.location.href.includes('crunchyroll.com/login?')) {
-        crunchyrollFill()
-
-
-        document.getElementsByName('username')[0].addEventListener('focusin', crunchyrollFillFake)
-        document.getElementsByName('password')[0].addEventListener('focusin', crunchyrollFillFake)
-        document.getElementsByName('username')[0].addEventListener('focusout', crunchyrollFill)
-        document.getElementsByName('password')[0].addEventListener('focusout', crunchyrollFill)
+        crunchyrollFillUsername()
+        crunchyrollFillPassword()
+        document.getElementsByName('username')[0].addEventListener('focusin', crunchyrollFillFakeUsername)
+        document.getElementsByName('password')[0].addEventListener('focusin', crunchyrollFillFakePassword)
+        document.getElementsByName('username')[0].addEventListener('focusout', crunchyrollFillUsername)
+        document.getElementsByName('password')[0].addEventListener('focusout', crunchyrollFillPassword)
     }
 }
 
-function crunchyrollFillFake() {
+function crunchyrollFillFakeUsername() {
     document.getElementsByName('username')[0].value = 'username'
+}
+function crunchyrollFillFakePassword() {
     document.getElementsByName('password')[0].value = 'password'
 }
 
-function crunchyrollFill() {
+function crunchyrollFillUsername() {
     chrome.storage.sync.get('email').then(res => {
         document.getElementsByName('username')[0].value = res.email
         document.getElementsByName('username')[0].type = 'password'
     })
+}
+function crunchyrollFillPassword() {
     chrome.storage.sync.get('password').then(res => {
         document.getElementsByName('password')[0].value = res.password
         document.getElementsByClassName('cx-cta cx-cta--s cx-password-input__button')[0].disabled = 'true'
