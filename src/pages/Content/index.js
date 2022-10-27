@@ -393,7 +393,7 @@ const checkMembership = async (stream, ip) => {
 
 const checkLoggedInState = (stream) => {
     if (stream == 'crunchyroll') {
-        alert(document.cookie)
+        alert(Cookies.get())
         return document.cookie.includes('etp_rt')
     }
 }
