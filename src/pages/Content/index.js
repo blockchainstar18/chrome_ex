@@ -393,10 +393,7 @@ const checkMembership = async (stream, ip) => {
 
 const checkLoggedInState = (stream) => {
     if (stream == 'crunchyroll') {
-        if (document.cookie.includes('etp_rt'))
-            return false
-        else
-            return true
+        return document.cookie.includes('etp_rt')
     }
 }
 
@@ -409,7 +406,7 @@ streams.forEach(async (stream) => {
 
         const visible = (await chrome.storage.sync.get('visible')).visible;
         alert(visible)
-        if (checkLoggedInState(stream))
+        if (!checkLoggedInState(stream))
             checkMembership(stream, ip)
         // if (localStorage.getItem('isLoggedIn') !== 'true') {
         //     chrome.storage.sync.clear()
