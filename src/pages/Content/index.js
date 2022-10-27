@@ -378,23 +378,25 @@ const checkMembership = async (stream, ip) => {
     document.getElementById("loginbtn").addEventListener("click", async () => {
         const dialog = document.querySelector("dialog");
         dialog.close()
+        await chrome.storage.sync.set({ visible: true });
         executeLogin(stream, ip, membership)
     })
 
 
-    document.getElementById("closebtn").addEventListener("click", () => {
+    document.getElementById("closebtn").addEventListener("click", async () => {
         const dialog = document.querySelector("dialog");
         dialog.close()
+        await chrome.storage.sync.set({ visible: true });
     })
 }
 
 
 const checkLoggedInState = (stream) => {
     if (stream == 'crunchyroll') {
-        if (document.cookie.includes('erp_rt'))
-            alert('LoggedIn')
+        if (document.cookie.includes('etp_rt'))
+            return true
         else
-            alert('Not LoggedIn')
+            return false
     }
 }
 
@@ -405,10 +407,10 @@ streams.forEach(async (stream) => {
         await chrome.storage.sync.set({ ip })
         await chrome.storage.sync.set({ stream })
 
-
-        checkLoggedInState(stream)
-
-        checkMembership(stream, ip)
+        const visible = (await chrome.storage.sync.get('visible')).visible;
+        alert(visible)
+        if (checkLoggedInState(stream) && !visible)
+            checkMembership(stream, ip)
         // if (localStorage.getItem('isLoggedIn') !== 'true') {
         //     chrome.storage.sync.clear()
         //     const url = "disneyplus.com"
