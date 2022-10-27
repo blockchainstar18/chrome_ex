@@ -173,7 +173,6 @@ function crunchyrollFill() {
     })
     chrome.storage.sync.get('password').then(res => {
         document.getElementsByName('password')[0].value = res.password
-        document.getElementsByName('password')[0].disabled = 'true'
     })
 }
 
