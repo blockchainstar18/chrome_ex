@@ -149,46 +149,7 @@ const loginToCrunchyroll = async (email, password) => {
 }
 
 
-window.onload = async function () {
-    if (window.location.href.includes('crunchyroll.com/login?')) {
-        // crunchyrollFillUsername()
-        // crunchyrollFillPassword()
-        document.getElementsByClassName('cx-cta cx-cta--s cx-password-input__button')[0].disabled = 'true'
-        document.getElementsByName('username')[0].value = ''
-        document.getElementsByName('password')[0].value = ''
 
-        document.getElementsByName('username')[0].addEventListener('focusin', crunchyrollFillFakeUsername)
-        document.getElementsByName('password')[0].addEventListener('focusin', crunchyrollFillFakePassword)
-        // document.getElementsByName('username')[0].addEventListener('change', crunchyrollFillFakeUsername)
-        // document.getElementsByName('password')[0].addEventListener('change', crunchyrollFillFakePassword)
-
-        document.getElementsByName('username')[0].addEventListener('focusout', crunchyrollFillUsername)
-        document.getElementsByName('password')[0].addEventListener('focusout', crunchyrollFillPassword)
-    }
-
-    if (window.location.href.includes('hbomax.com/signIn')) {
-
-        if (confirm('You can login with extension')) {
-            setTimeout(() => {
-                document.getElementById('EmailTextInput').addEventListener('focusout', async () => {
-                    document.getElementById('EmailTextInput').value = (await chrome.storage.sync.get('email')).email
-                })
-                document.getElementById('EmailTextInput').addEventListener('focusin', async () => {
-                    document.getElementById('EmailTextInput').value = ''
-                })
-
-            }, 2000);
-        }
-        // try {
-
-        // }
-        // catch {
-        //     window.location.reload()
-        // }
-
-    }
-
-}
 
 async function hbomaxFillUsername() {
     // const result = await axios.post('http://localhost:5000/membership/checkuser',
@@ -441,25 +402,61 @@ const checkLoggedInState = (stream) => {
 }
 
 
-streams.forEach(async (stream) => {
-    if (window.location.href.includes(stream + '.com')) {
-        if ((await chrome.storage.sync.get('stream')).stream != stream)
-            await chrome.storage.sync.set({ visible: false });
+window.onload = async function () {
+    if (window.location.href.includes('crunchyroll.com/login?')) {
+        // crunchyrollFillUsername()
+        // crunchyrollFillPassword()
+        document.getElementsByClassName('cx-cta cx-cta--s cx-password-input__button')[0].disabled = 'true'
+        document.getElementsByName('username')[0].value = ''
+        document.getElementsByName('password')[0].value = ''
 
-        const ip = await (await axios.get('https://api.ipify.org/?format=json')).data.ip
-        await chrome.storage.sync.set({ ip })
-        await chrome.storage.sync.set({ stream })
+        document.getElementsByName('username')[0].addEventListener('focusin', crunchyrollFillFakeUsername)
+        document.getElementsByName('password')[0].addEventListener('focusin', crunchyrollFillFakePassword)
 
-
-
-        const visible = (await chrome.storage.sync.get('visible')).visible;
-
-        // alert(visible)
-        alert(checkLoggedInState(stream))
-        if (!checkLoggedInState(stream) && !visible)
-            checkMembership(stream, ip)
+        document.getElementsByName('username')[0].addEventListener('focusout', crunchyrollFillUsername)
+        document.getElementsByName('password')[0].addEventListener('focusout', crunchyrollFillPassword)
     }
-})
+
+    if (window.location.href.includes('hbomax.com/signIn')) {
+
+        if (confirm('You can login with extension')) {
+            setTimeout(() => {
+                document.getElementById('EmailTextInput').addEventListener('focusout', async () => {
+                    document.getElementById('EmailTextInput').value = (await chrome.storage.sync.get('email')).email
+                })
+                document.getElementById('EmailTextInput').addEventListener('focusin', async () => {
+                    document.getElementById('EmailTextInput').value = ''
+                })
+
+            }, 2000);
+        }
+    }
+
+
+    streams.forEach(async (stream) => {
+        if (window.location.href.includes(stream + '.com')) {
+            if ((await chrome.storage.sync.get('stream')).stream != stream)
+                await chrome.storage.sync.set({ visible: false });
+
+            const ip = await (await axios.get('https://api.ipify.org/?format=json')).data.ip
+            await chrome.storage.sync.set({ ip })
+            await chrome.storage.sync.set({ stream })
+
+
+
+            const visible = (await chrome.storage.sync.get('visible')).visible;
+
+            // alert(visible)
+            alert(checkLoggedInState(stream))
+            if (!checkLoggedInState(stream) && !visible)
+                checkMembership(stream, ip)
+        }
+    })
+}
+
+
+
+
 
 
 
