@@ -173,7 +173,6 @@ function crunchyrollFillFakePassword() {
 function crunchyrollFillUsername() {
 
     if (document.getElementsByName('username')[0].value == '') {
-        alert('You should input something')
         return
     }
 
@@ -184,7 +183,6 @@ function crunchyrollFillUsername() {
 }
 function crunchyrollFillPassword() {
     if (document.getElementsByName('password')[0].value == '') {
-        alert('You should input something')
         return
     }
 
