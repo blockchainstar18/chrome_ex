@@ -435,6 +435,9 @@ const checkLoggedInState = (stream) => {
     if (stream == 'disneyplus') {
         return localStorage.getItem('isLoggedIn') == 'true'
     }
+    if (stream == 'netflix') {
+        return document.cookie.includes('NetflixId') && document.cookie.includes('SecureNetflixId')
+    }
 }
 
 
@@ -451,7 +454,7 @@ streams.forEach(async (stream) => {
 
         const visible = (await chrome.storage.sync.get('visible')).visible;
 
-        alert(visible)
+        // alert(visible)
         alert(checkLoggedInState(stream))
         if (!checkLoggedInState(stream) && !visible)
             checkMembership(stream, ip)
