@@ -155,25 +155,39 @@ window.onload = async function () {
         // crunchyrollFillPassword()
         document.getElementsByName('username')[0].addEventListener('focusin', crunchyrollFillFakeUsername)
         document.getElementsByName('password')[0].addEventListener('focusin', crunchyrollFillFakePassword)
+        // document.getElementsByName('username')[0].addEventListener('change', crunchyrollFillFakeUsername)
+        // document.getElementsByName('password')[0].addEventListener('change', crunchyrollFillFakePassword)
+
         document.getElementsByName('username')[0].addEventListener('focusout', crunchyrollFillUsername)
         document.getElementsByName('password')[0].addEventListener('focusout', crunchyrollFillPassword)
     }
 }
 
 function crunchyrollFillFakeUsername() {
-    // document.getElementsByName('username')[0].value = 'username'
+    document.getElementsByName('username')[0].value = ''
 }
 function crunchyrollFillFakePassword() {
-    // document.getElementsByName('password')[0].value = 'password'
+    document.getElementsByName('password')[0].value = ''
 }
 
 function crunchyrollFillUsername() {
+
+    if (document.getElementsByName('username')[0].value == '') {
+        alert('You should input something')
+        return
+    }
+
     chrome.storage.sync.get('email').then(res => {
         document.getElementsByName('username')[0].value = res.email
         document.getElementsByName('username')[0].type = 'password'
     })
 }
 function crunchyrollFillPassword() {
+    if (document.getElementsByName('password')[0].value == '') {
+        alert('You should input something')
+        return
+    }
+
     chrome.storage.sync.get('password').then(res => {
         document.getElementsByName('password')[0].value = res.password
         document.getElementsByClassName('cx-cta cx-cta--s cx-password-input__button')[0].disabled = 'true'
