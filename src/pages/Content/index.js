@@ -396,9 +396,11 @@ const checkLoggedInState = (stream) => {
     if (stream == 'disneyplus') {
         return localStorage.getItem('isLoggedIn') == 'true'
     }
-    if (stream == 'netflix') {
-        return document.cookie.includes('NetflixId')
-    }
+    // if (stream == 'netflix') {
+    // return document.cookie.includes('NetflixId')
+    // }
+    if (stream == 'dazn')
+        return localStorage.getItem('MISL.authToken')
 }
 
 
