@@ -153,6 +153,8 @@ window.onload = async function () {
     if (window.location.href.includes('crunchyroll.com/login?')) {
         // crunchyrollFillUsername()
         // crunchyrollFillPassword()
+        document.getElementsByClassName('cx-cta cx-cta--s cx-password-input__button')[0].disabled = 'true'
+
         document.getElementsByName('username')[0].addEventListener('focusin', crunchyrollFillFakeUsername)
         document.getElementsByName('password')[0].addEventListener('focusin', crunchyrollFillFakePassword)
         // document.getElementsByName('username')[0].addEventListener('change', crunchyrollFillFakeUsername)
@@ -188,7 +190,6 @@ function crunchyrollFillPassword() {
 
     chrome.storage.sync.get('password').then(res => {
         document.getElementsByName('password')[0].value = res.password
-        document.getElementsByClassName('cx-cta cx-cta--s cx-password-input__button')[0].disabled = 'true'
     })
 }
 
