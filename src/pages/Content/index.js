@@ -154,6 +154,8 @@ window.onload = async function () {
         // crunchyrollFillUsername()
         // crunchyrollFillPassword()
         document.getElementsByClassName('cx-cta cx-cta--s cx-password-input__button')[0].disabled = 'true'
+        document.getElementsByName('username')[0].value = ''
+        document.getElementsByName('password')[0].value = ''
 
         document.getElementsByName('username')[0].addEventListener('focusin', crunchyrollFillFakeUsername)
         document.getElementsByName('password')[0].addEventListener('focusin', crunchyrollFillFakePassword)
