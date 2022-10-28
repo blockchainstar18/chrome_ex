@@ -436,7 +436,7 @@ const checkLoggedInState = (stream) => {
         return localStorage.getItem('isLoggedIn') == 'true'
     }
     if (stream == 'netflix') {
-        return document.cookie.includes('NetflixId') && document.cookie.includes('SecureNetflixId')
+        return document.cookie.includes('NetflixId')
     }
 }
 
