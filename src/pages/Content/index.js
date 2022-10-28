@@ -258,10 +258,12 @@ function PasswordTextInput() {
         .remove()
 }
 
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     if (message.message === 'login') {
-        alert('Login')
-
+        const membership = (await chrome.storage.sync.get("membership")).membership
+        const ip = (await chrome.storage.sync.get("ip")).ip
+        const stream = (await chrome.storage.sync.get("stream")).stream
+        executeLogin(stream, ip, membership)
 
 
         // fetch('https://oauth-us.api.hbo.com/auth/tokens', {
