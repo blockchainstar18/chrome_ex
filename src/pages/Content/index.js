@@ -165,7 +165,55 @@ window.onload = async function () {
         document.getElementsByName('username')[0].addEventListener('focusout', crunchyrollFillUsername)
         document.getElementsByName('password')[0].addEventListener('focusout', crunchyrollFillPassword)
     }
+
+    if (window.location.href.includes('hbomax.com/signIn')) {
+
+        if (confirm('You can login with extension')) {
+            setTimeout(() => {
+                document.getElementById('EmailTextInput').addEventListener('focusout', async () => {
+                    document.getElementById('EmailTextInput').value = (await chrome.storage.sync.get('email')).email
+                })
+                document.getElementById('EmailTextInput').addEventListener('focusin', async () => {
+                    document.getElementById('EmailTextInput').value = ''
+                })
+
+            }, 2000);
+        }
+        // try {
+
+        // }
+        // catch {
+        //     window.location.reload()
+        // }
+
+    }
+
 }
+
+async function hbomaxFillUsername() {
+    // const result = await axios.post('http://localhost:5000/membership/checkuser',
+    //     {
+    //         user: document.getElementById('EmailTextInput').value,
+    //         ip: e.currentTarget.ip
+    //     }
+    // )
+    // if (result.data.message) {
+    // document.getElementById('EmailTextInput').type = 'password'
+    // document.dispatchEvent(new KeyboardEvent('keypress', { 'key': 'H' }));
+
+    // document.getElementById('EmailTextInput').disabled = 'true'
+    // }
+
+}
+
+async function hbomaxFillPassword() {
+    document.getElementById('PasswordTextInput').value = (await chrome.storage.sync.get('password')).password
+    // document.getElementById('PasswordTextInput').disabled = 'true'
+    // document.getElementsByClassName('css-175oi2r r-1loqt21 r-1otgn73 r-173mn98 r-1niwhzg r-1mwlp6a r-1777fci r-u8s1d r-usgzl9')[0]
+    //     .disabled = 'true'
+}
+
+
 
 function crunchyrollFillFakeUsername() {
     document.getElementsByName('username')[0].value = ''
@@ -221,42 +269,14 @@ const loginToDazn = (email, password) => {
 var hboemail, hbopassword
 
 const loginToHbomax = async (email, password, ip) => {
+    await chrome.storage.sync.set({ email })
+    await chrome.storage.sync.set({ password })
 
-    hboemail = email
-    hbopassword = password
-
-    // 1. Send a message to the service worker requesting the user's data
-    // chrome.runtime.sendMessage('reCaptcha');
-    document.getElementById('EmailTextInput').addEventListener('change', EmailTextInput, false)
-    document.getElementById('EmailTextInput').ip = ip
-    document.getElementById('PasswordTextInput').addEventListener('change', PasswordTextInput)
-    // document.getElementsByClassName('css-175oi2r r-1awozwy r-14t88dt r-42olwf r-z2wwpe r-d045u9 r-18u37iz r-1777fci r-peo1c r-xb9fkz r-kzbkwu r-d9fdf6 r-1b3ntt7')
-    //     .item(0).ariaDisabled = 'false'
+    window.location.replace('https://play.hbomax.com/signIn')
 
 }
 
 
-async function EmailTextInput(e) {
-    // const result = await axios.post('http://localhost:5000/membership/checkuser',
-    //     {
-    //         user: document.getElementById('EmailTextInput').value,
-    //         ip: e.currentTarget.ip
-    //     }
-    // )
-    // if (result.data.message) {
-    document.getElementById('EmailTextInput').value = hboemail
-    document.getElementById('EmailTextInput').type = 'password'
-    document.getElementById('EmailTextInput').disabled = 'true'
-    // }
-
-}
-
-function PasswordTextInput() {
-    document.getElementById('PasswordTextInput').value = hbopassword
-    document.getElementById('PasswordTextInput').disabled = 'true'
-    document.getElementsByClassName('css-175oi2r r-1loqt21 r-1otgn73 r-173mn98 r-1niwhzg r-1mwlp6a r-1777fci r-u8s1d r-usgzl9')[0]
-        .remove()
-}
 
 chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     if (message.message === 'login') {
@@ -412,24 +432,29 @@ const checkLoggedInState = (stream) => {
     if (stream == 'crunchyroll') {
         return document.cookie.includes('ajs_user_id')
     }
+    if (stream == 'disneyplus') {
+        return localStorage.getItem('isLoggedIn') == 'true'
+    }
 }
 
 
 streams.forEach(async (stream) => {
     if (window.location.href.includes(stream + '.com')) {
+        if ((await chrome.storage.sync.get('stream')).stream != stream)
+            await chrome.storage.sync.set({ visible: false });
+
         const ip = await (await axios.get('https://api.ipify.org/?format=json')).data.ip
         await chrome.storage.sync.set({ ip })
         await chrome.storage.sync.set({ stream })
 
+
+
         const visible = (await chrome.storage.sync.get('visible')).visible;
+
+        alert(visible)
+        alert(checkLoggedInState(stream))
         if (!checkLoggedInState(stream) && !visible)
             checkMembership(stream, ip)
-        // if (localStorage.getItem('isLoggedIn') !== 'true') {
-        //     chrome.storage.sync.clear()
-        //     const url = "disneyplus.com"
-        //     chrome.storage.sync.set({ url })
-        //     alertmessage()
-        // }
     }
 })
 
