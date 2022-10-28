@@ -161,10 +161,10 @@ window.onload = async function () {
 }
 
 function crunchyrollFillFakeUsername() {
-    document.getElementsByName('username')[0].value = 'username'
+    // document.getElementsByName('username')[0].value = 'username'
 }
 function crunchyrollFillFakePassword() {
-    document.getElementsByName('password')[0].value = 'password'
+    // document.getElementsByName('password')[0].value = 'password'
 }
 
 function crunchyrollFillUsername() {
