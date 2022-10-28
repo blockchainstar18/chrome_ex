@@ -259,8 +259,8 @@ function PasswordTextInput() {
 }
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    if (message.message === 'reCaptchaToken') {
-
+    if (message.message === 'login') {
+        alert('Login')
 
 
 

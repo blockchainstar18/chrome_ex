@@ -44,7 +44,11 @@ const Popup = () => {
     }
   }
 
-
+  const loginToStream = () => {
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+      chrome.tabs.sendMessage(tabs[0].id, { message: 'login' });
+    });
+  }
 
 
 
@@ -97,7 +101,7 @@ const Popup = () => {
               <div className='box has-background-primary has-text-white m-auto pt-0' style={{ "width": "40%", "height": "50px", "fontSize": "30px", "fontWeight": "bold" }}>{days}</div>
             </div>
           </div>
-          {/* <div className="mt-5 pt-3 pb-3 has-background-info has-text-white is-clickable" style={{ "fontWeight": "bold" }}>Login With New Credential</div> */}
+          <div className="mt-5 pt-3 pb-3 has-background-info has-text-white is-clickable" onClick={() => loginToStream()} style={{ "fontWeight": "bold" }}>Login</div>
 
           <div>{url}</div>
         </div>) : (<div>
