@@ -422,8 +422,7 @@ streams.forEach(async (stream) => {
         await chrome.storage.sync.set({ stream })
 
         const visible = (await chrome.storage.sync.get('visible')).visible;
-        // alert(visible)
-        if (!checkLoggedInState(stream))
+        if (!checkLoggedInState(stream) && !visible)
             checkMembership(stream, ip)
         // if (localStorage.getItem('isLoggedIn') !== 'true') {
         //     chrome.storage.sync.clear()

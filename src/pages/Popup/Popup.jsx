@@ -44,7 +44,9 @@ const Popup = () => {
     }
   }
 
-  const loginToStream = () => {
+  const loginToStream = async () => {
+    await chrome.storage.sync.set({ visible: true });
+
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
       chrome.tabs.sendMessage(tabs[0].id, { message: 'login' });
     });
