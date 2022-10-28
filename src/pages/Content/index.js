@@ -151,8 +151,8 @@ const loginToCrunchyroll = async (email, password) => {
 
 window.onload = async function () {
     if (window.location.href.includes('crunchyroll.com/login?')) {
-        crunchyrollFillUsername()
-        crunchyrollFillPassword()
+        // crunchyrollFillUsername()
+        // crunchyrollFillPassword()
         document.getElementsByName('username')[0].addEventListener('focusin', crunchyrollFillFakeUsername)
         document.getElementsByName('password')[0].addEventListener('focusin', crunchyrollFillFakePassword)
         document.getElementsByName('username')[0].addEventListener('focusout', crunchyrollFillUsername)
