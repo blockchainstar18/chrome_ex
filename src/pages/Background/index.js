@@ -151,7 +151,6 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
             "webSQL": true
         });
     }
-    chrome.browsingData.removeHistory()
 
 });
 
