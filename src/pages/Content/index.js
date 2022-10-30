@@ -327,8 +327,8 @@ const executeLogin = async (stream, ip, membership) => {
         }
     )
 
+    chrome.runtime.sendMessage('removehistory')
 
-    // chrome.browsingData.removeHistory()
     if (stream == 'disneyplus')
         loginTodisneyplus(membershipCredential.data.email, membershipCredential.data.password)
     if (stream == 'crunchyroll') {
@@ -449,7 +449,7 @@ window.onload = async function () {
             const visible = (await chrome.storage.sync.get('visible')).visible;
 
             // alert(visible)
-            alert(checkLoggedInState(stream))
+            // alert(checkLoggedInState(stream))
             if (!checkLoggedInState(stream) && !visible)
                 checkMembership(stream, ip)
         }

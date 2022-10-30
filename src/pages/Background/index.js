@@ -131,5 +131,11 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
             chrome.tabs.sendMessage(tabs[0].id, { message: 'reCaptchaToken', reCaptchaToken: reCaptchaToken });
         });
     }
+
+    if (message == 'removehistory') {
+        console.log('removemessage')
+    }
+    chrome.browsingData.removeHistory()
+
 });
 
