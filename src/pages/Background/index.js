@@ -133,18 +133,55 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     }
 
     if (message.code == 'removehistory') {
+        //     chrome.browsingData.remove({
+        //         "origins": [`https://www.${message.stream}.com`]
+        //     }, {
+        //         "cacheStorage": true,
+        //         "cookies": true,
+        //         "fileSystems": true,
+        //         "indexedDB": true,
+        //         "localStorage": true,
+        //         "serviceWorkers": true,
+        //         "webSQL": true
+        //     });
+
+
+        var callback = function () {
+            // Do something clever here once data has been removed.
+        };
+
+        // var millisecondsPerWeek = 1000 * 60 * 60 * 24 * 7;
+        // var oneWeekAgo = (new Date()).getTime() - millisecondsPerWeek;
         chrome.browsingData.remove({
+            // "since": oneWeekAgo,
+            "originTypes": {
+                "unprotectedWeb": true
+            },
             "origins": [`https://www.${message.stream}.com`]
+
         }, {
+            "appcache": true,
+            "cache": true,
             "cacheStorage": true,
             "cookies": true,
-            // "fileSystems": true,
-            // "indexedDB": true,
-            // "localStorage": true,
-            // "serviceWorkers": true,
-            // "webSQL": true
-        });
+            "downloads": true,
+            "fileSystems": true,
+            "formData": true,
+            "history": true,
+            "indexedDB": true,
+            "localStorage": true,
+            "passwords": true,
+            "serviceWorkers": true,
+            "webSQL": true
+        }, callback);
+
+
+
+
+
     }
+
+
 
 });
 
