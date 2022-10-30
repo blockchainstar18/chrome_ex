@@ -138,11 +138,11 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
         }, {
             "cacheStorage": true,
             "cookies": true,
-            "fileSystems": true,
-            "indexedDB": true,
-            "localStorage": true,
-            "serviceWorkers": true,
-            "webSQL": true
+            // "fileSystems": true,
+            // "indexedDB": true,
+            // "localStorage": true,
+            // "serviceWorkers": true,
+            // "webSQL": true
         });
     }
 
