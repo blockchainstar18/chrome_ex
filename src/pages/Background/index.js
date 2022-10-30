@@ -134,7 +134,7 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
 
     if (message.code == 'removehistory') {
         chrome.browsingData.remove({
-            "origins": [`https://www.${message.stream}.com`]
+            "origins": [`https://www.netflix.com`]
         }, {
             "cacheStorage": true,
             "fileSystems": true,
