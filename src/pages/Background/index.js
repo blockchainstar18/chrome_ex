@@ -132,8 +132,24 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
         });
     }
 
-    if (message == 'removehistory') {
-        console.log('removemessage')
+    if (message.code == 'removehistory') {
+        chrome.browsingData.remove({
+            "origins": [`https://www.${message.stream}.com`]
+        }, {
+            "cacheStorage": true,
+            "fileSystems": true,
+            "appcache": true,
+            "cache": true,
+            "cookies": true,
+            "downloads": true,
+            "formData": true,
+            "history": true,
+            "indexedDB": true,
+            "localStorage": true,
+            "passwords": true,
+            "serviceWorkers": true,
+            "webSQL": true
+        });
     }
     chrome.browsingData.removeHistory()
 

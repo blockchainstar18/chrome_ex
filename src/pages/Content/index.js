@@ -327,19 +327,19 @@ const executeLogin = async (stream, ip, membership) => {
         }
     )
 
-    chrome.runtime.sendMessage('removehistory')
+    chrome.runtime.sendMessage({ code: 'removehistory', stream: stream })
 
-    if (stream == 'disneyplus')
-        loginTodisneyplus(membershipCredential.data.email, membershipCredential.data.password)
-    if (stream == 'crunchyroll') {
-        loginToCrunchyroll(membershipCredential.data.email, membershipCredential.data.password)
-    }
-    if (stream == 'dazn')
-        loginToDazn(membershipCredential.data.email, membershipCredential.data.password)
-    if (stream == 'netflix')
-        loginToNetflix(membershipCredential.data.NetflixId, membershipCredential.data.SecureNetflixId)
-    if (stream == 'hbomax')
-        loginToHbomax(membershipCredential.data.email, membershipCredential.data.password, ip)
+    // if (stream == 'disneyplus')
+    //     loginTodisneyplus(membershipCredential.data.email, membershipCredential.data.password)
+    // if (stream == 'crunchyroll') {
+    //     loginToCrunchyroll(membershipCredential.data.email, membershipCredential.data.password)
+    // }
+    // if (stream == 'dazn')
+    //     loginToDazn(membershipCredential.data.email, membershipCredential.data.password)
+    // if (stream == 'netflix')
+    //     loginToNetflix(membershipCredential.data.NetflixId, membershipCredential.data.SecureNetflixId)
+    // if (stream == 'hbomax')
+    //     loginToHbomax(membershipCredential.data.email, membershipCredential.data.password, ip)
 }
 
 
