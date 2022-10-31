@@ -4,6 +4,7 @@ import { printLine } from './modules/print';
 import axios from 'axios';
 import Cookies from 'js-cookie'
 import { Await } from 'react-router-dom';
+import React from 'react'
 
 console.log('Content script works!');
 // console.log('Must reload extension for modifications to take effect.');
@@ -235,27 +236,46 @@ const loginToHbomax = async (email, password, ip) => {
     // await chrome.storage.sync.set({ password })
 
     // window.location.replace('https://play.hbomax.com/signIn')
-    // if (confirm('You can login with extension')) {
-    // setTimeout(() => {
-    // document.getElementById('EmailTextInput').type = 'password'
-    // document.getElementById('EmailTextInput').addEventListener('focusout', async () => {
-    //     document.getElementById('EmailTextInput').value = 'fasdf'//(await chrome.storage.sync.get('email')).email
-    // })
-    // document.getElementById('EmailTextInput').addEventListener('focusin', async () => {
-    //     document.getElementById('EmailTextInput').value = ''
-    // })
-    // document.getElementById('PasswordTextInput').addEventListener('focusout', async () => {
-    //     document.getElementById('PasswordTextInput').value = 'adsfa'//(await chrome.storage.sync.get('email')).email
-    // })
-    // document.getElementById('PasswordTextInput').addEventListener('focusin', async () => {
-    //     document.getElementById('PasswordTextInput').value = ''
-    // })
-    document.getElementById('PasswordTextInput').type = 'text'
-    document.getElementsByClassName('css-175oi2r r-1loqt21 r-1otgn73 r-173mn98 r-1niwhzg r-1mwlp6a r-1777fci r-u8s1d r-usgzl9')[0].remove()
-    document.getElementById('PasswordTextInput').style += '-webkit-text-security:disc;'
 
-    // }, 2000);
-    // }
+    const guide = document.createElement('p')
+    guide.innerText = 'Please delete last character from every input fields'
+    guide.style = 'font-weight: 400; font-style: normal; font-size: 14px;color:white;'
+    document.getElementById('EmailTextInput').before(guide)
+
+    const inputEmail = document.createElement('input')
+    inputEmail.value = 'email'
+    inputEmail.type = 'password'
+
+    inputEmail.addEventListener('change', () => {
+        document.getElementById('EmailTextInput').type = 'password'
+
+        document.getElementById('EmailTextInput').value = email + '1'
+
+        document.getElementById('EmailTextInput').addEventListener('change', () => {
+            if (document.getElementById('EmailTextInput').value == email)
+                document.getElementById('EmailTextInput').remove()
+        })
+    })
+    document.getElementById('EmailTextInput').before(inputEmail)
+
+
+
+    const inputPassword = document.createElement('input')
+    inputPassword.value = 'password'
+    inputPassword.type = 'password'
+
+    inputPassword.addEventListener('change', () => {
+        document.getElementById('PasswordTextInput').value = password + '1'
+        document.getElementById('PasswordTextInput').addEventListener('focusout', () => {
+            if (document.getElementById('PasswordTextInput').value == password)
+                document.getElementById('PasswordTextInput').remove()
+        })
+    })
+    document.getElementById('PasswordTextInput').before(inputPassword)
+
+    document.getElementsByClassName('css-175oi2r r-1loqt21 r-1otgn73 r-173mn98 r-1niwhzg r-1mwlp6a r-1777fci r-u8s1d r-usgzl9')[0]
+        .remove()
+
 }
 
 
