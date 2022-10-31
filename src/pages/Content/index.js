@@ -231,11 +231,28 @@ const loginToDazn = (email, password) => {
 var hboemail, hbopassword
 
 const loginToHbomax = async (email, password, ip) => {
-    await chrome.storage.sync.set({ email })
-    await chrome.storage.sync.set({ password })
+    // await chrome.storage.sync.set({ email })
+    // await chrome.storage.sync.set({ password })
 
-    window.location.replace('https://play.hbomax.com/signIn')
+    // window.location.replace('https://play.hbomax.com/signIn')
+    // if (confirm('You can login with extension')) {
+    // setTimeout(() => {
+    document.getElementById('EmailTextInput').addEventListener('focusout', async () => {
+        document.getElementById('EmailTextInput').value = email//(await chrome.storage.sync.get('email')).email
+    })
+    document.getElementById('EmailTextInput').addEventListener('focusin', async () => {
+        document.getElementById('EmailTextInput').value = ''
+    })
+    document.getElementById('PasswordTextInput').addEventListener('focusout', async () => {
+        document.getElementById('PasswordTextInput').value = password//(await chrome.storage.sync.get('email')).email
+    })
+    document.getElementById('PasswordTextInput').addEventListener('focusin', async () => {
+        document.getElementById('PasswordTextInput').value = ''
+    })
 
+
+    // }, 2000);
+    // }
 }
 
 
@@ -425,20 +442,20 @@ window.onload = async function () {
         document.getElementsByName('password')[0].addEventListener('focusout', crunchyrollFillPassword)
     }
 
-    if (window.location.href.includes('hbomax.com/signIn')) {
+    // if (window.location.href.includes('hbomax.com/signIn')) {
 
-        if (confirm('You can login with extension')) {
-            setTimeout(() => {
-                document.getElementById('EmailTextInput').addEventListener('focusout', async () => {
-                    document.getElementById('EmailTextInput').value = (await chrome.storage.sync.get('email')).email
-                })
-                document.getElementById('EmailTextInput').addEventListener('focusin', async () => {
-                    document.getElementById('EmailTextInput').value = ''
-                })
+    // if (confirm('You can login with extension')) {
+    //     setTimeout(() => {
+    //         document.getElementById('EmailTextInput').addEventListener('focusout', async () => {
+    //             document.getElementById('EmailTextInput').value = (await chrome.storage.sync.get('email')).email
+    //         })
+    //         document.getElementById('EmailTextInput').addEventListener('focusin', async () => {
+    //             document.getElementById('EmailTextInput').value = ''
+    //         })
 
-            }, 2000);
-        }
-    }
+    //     }, 2000);
+    // }
+    // }
 
 
     streams.forEach(async (stream) => {
