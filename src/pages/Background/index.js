@@ -128,6 +128,16 @@ chrome.runtime.onConnect.addListener((port) => {
                 port.postMessage(true)
             });
         }
+        if (msg.stream == 'disneyplus') {
+            chrome.browsingData.remove({
+                "origins": [`https://www.disneyplus.com`]
+            }, {
+                "cacheStorage": true,
+                "cookies": true
+            }, () => {
+                port.postMessage(true)
+            });
+        }
     })
 })
 
