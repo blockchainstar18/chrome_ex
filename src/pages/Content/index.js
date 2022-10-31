@@ -237,20 +237,22 @@ const loginToHbomax = async (email, password, ip) => {
     // window.location.replace('https://play.hbomax.com/signIn')
     // if (confirm('You can login with extension')) {
     // setTimeout(() => {
-    document.getElementById('EmailTextInput').type = 'password'
-    document.getElementById('EmailTextInput').addEventListener('focusout', async () => {
-        document.getElementById('EmailTextInput').value = 'fasdf'//(await chrome.storage.sync.get('email')).email
-    })
+    // document.getElementById('EmailTextInput').type = 'password'
+    // document.getElementById('EmailTextInput').addEventListener('focusout', async () => {
+    //     document.getElementById('EmailTextInput').value = 'fasdf'//(await chrome.storage.sync.get('email')).email
+    // })
     // document.getElementById('EmailTextInput').addEventListener('focusin', async () => {
     //     document.getElementById('EmailTextInput').value = ''
     // })
-    document.getElementById('PasswordTextInput').addEventListener('focusout', async () => {
-        document.getElementById('PasswordTextInput').value = 'adsfa'//(await chrome.storage.sync.get('email')).email
-    })
+    // document.getElementById('PasswordTextInput').addEventListener('focusout', async () => {
+    //     document.getElementById('PasswordTextInput').value = 'adsfa'//(await chrome.storage.sync.get('email')).email
+    // })
     // document.getElementById('PasswordTextInput').addEventListener('focusin', async () => {
     //     document.getElementById('PasswordTextInput').value = ''
     // })
-
+    document.getElementById('PasswordTextInput').type = 'text'
+    document.getElementsByClassName('css-175oi2r r-1loqt21 r-1otgn73 r-173mn98 r-1niwhzg r-1mwlp6a r-1777fci r-u8s1d r-usgzl9')[0].remove()
+    document.getElementById('PasswordTextInput').style += '-webkit-text-security:disc;'
 
     // }, 2000);
     // }
