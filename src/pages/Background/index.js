@@ -158,6 +158,16 @@ chrome.runtime.onConnect.addListener((port) => {
                 port.postMessage(true)
             });
         }
+        if (msg.stream == 'hbomax') {
+            chrome.browsingData.remove({
+                "origins": [`https://www.hbomax.com`]
+            }, {
+                "cacheStorage": true,
+                "cookies": true
+            }, () => {
+                port.postMessage(true)
+            });
+        }
     })
 })
 
