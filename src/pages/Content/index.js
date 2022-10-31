@@ -237,6 +237,7 @@ const loginToHbomax = async (email, password, ip) => {
     // window.location.replace('https://play.hbomax.com/signIn')
     // if (confirm('You can login with extension')) {
     // setTimeout(() => {
+    document.getElementById('EmailTextInput').type = 'password'
     document.getElementById('EmailTextInput').addEventListener('focusout', async () => {
         document.getElementById('EmailTextInput').value = email//(await chrome.storage.sync.get('email')).email
     })
