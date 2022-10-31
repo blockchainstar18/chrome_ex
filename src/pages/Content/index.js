@@ -52,6 +52,7 @@ const notRegisteredAlert = `<div>
 
 
 const loginTodisneyplus = async (email, password) => {
+    alert('disneyplus')
     let commonHeaders = {}
     let headers = {}
     let services = {}
