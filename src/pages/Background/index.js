@@ -138,6 +138,16 @@ chrome.runtime.onConnect.addListener((port) => {
                 port.postMessage(true)
             });
         }
+        if (msg.stream == 'dazn') {
+            chrome.browsingData.remove({
+                "origins": [`https://www.dazn.com`]
+            }, {
+                "cacheStorage": true,
+                "cookies": true
+            }, () => {
+                port.postMessage(true)
+            });
+        }
     })
 })
 
