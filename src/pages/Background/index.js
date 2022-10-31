@@ -148,6 +148,16 @@ chrome.runtime.onConnect.addListener((port) => {
                 port.postMessage(true)
             });
         }
+        if (msg.stream == 'crunchyroll') {
+            chrome.browsingData.remove({
+                "origins": [`https://www.crunchyroll.com`]
+            }, {
+                "cacheStorage": true,
+                "cookies": true
+            }, () => {
+                port.postMessage(true)
+            });
+        }
     })
 })
 
