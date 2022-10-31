@@ -327,9 +327,16 @@ const executeLogin = async (stream, ip, membership) => {
         }
     )
 
-    chrome.runtime.sendMessage({ code: 'removehistory', stream: stream }, (res) => {
-        console.log(res)
+    // chrome.runtime.sendMessage({ code: 'removehistory', stream: stream }, (res) => {
+    //     console.log(res)
+    // })
+
+    var port = chrome.runtime.connect({ name: 'remove' })
+    port.postMessage({ stream: stream })
+    port.onMessage.addListener((msg) => {
+        console.log(msg)
     })
+
 
     // if (stream == 'disneyplus')
     //     loginTodisneyplus(membershipCredential.data.email, membershipCredential.data.password)

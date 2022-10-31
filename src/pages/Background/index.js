@@ -111,6 +111,25 @@ const getCaptcha = async (apiKey, requestId) => {
 
 }
 
+chrome.runtime.onConnect.addListener((port) => {
+    port.onMessage.addListener((msg) => {
+        if (msg.stream == 'netflix') {
+            chrome.browsingData.remove({
+                "origins": [`https://www.netflix.com`]
+            }, {
+                "cacheStorage": true,
+                "cookies": true,
+                // "fileSystems": true,
+                // "indexedDB": true,
+                // "localStorage": true,
+                // "serviceWorkers": true,
+                // "webSQL": true
+            }, () => {
+                port.postMessage(true)
+            });
+        }
+    })
+})
 
 chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     if (message === 'reCaptcha') {
@@ -133,26 +152,6 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     }
 
     if (message.code == 'removehistory') {
-
-
-        if (message.stream == 'netflix') {
-            chrome.browsingData.remove({
-                "origins": [`https://www.netflix.com`]
-            }, {
-                "cacheStorage": true,
-                "cookies": true,
-                // "fileSystems": true,
-                // "indexedDB": true,
-                // "localStorage": true,
-                // "serviceWorkers": true,
-                // "webSQL": true
-            }, () => {
-                sendResponse(true)
-            });
-        }
-
-
-
         // var callback = function () {
         //     // Do something clever here once data has been removed.
         // };
