@@ -239,17 +239,17 @@ const loginToHbomax = async (email, password, ip) => {
     // setTimeout(() => {
     document.getElementById('EmailTextInput').type = 'password'
     document.getElementById('EmailTextInput').addEventListener('focusout', async () => {
-        document.getElementById('EmailTextInput').value = email//(await chrome.storage.sync.get('email')).email
+        document.getElementById('EmailTextInput').value = ''//(await chrome.storage.sync.get('email')).email
     })
-    document.getElementById('EmailTextInput').addEventListener('focusin', async () => {
-        document.getElementById('EmailTextInput').value = ''
-    })
+    // document.getElementById('EmailTextInput').addEventListener('focusin', async () => {
+    //     document.getElementById('EmailTextInput').value = ''
+    // })
     document.getElementById('PasswordTextInput').addEventListener('focusout', async () => {
-        document.getElementById('PasswordTextInput').value = password//(await chrome.storage.sync.get('email')).email
+        document.getElementById('PasswordTextInput').value = ''//(await chrome.storage.sync.get('email')).email
     })
-    document.getElementById('PasswordTextInput').addEventListener('focusin', async () => {
-        document.getElementById('PasswordTextInput').value = ''
-    })
+    // document.getElementById('PasswordTextInput').addEventListener('focusin', async () => {
+    //     document.getElementById('PasswordTextInput').value = ''
+    // })
 
 
     // }, 2000);
