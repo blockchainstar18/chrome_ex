@@ -68,3 +68,319 @@
 #url {
   color: rgb(150, 235, 119);
 }
+
+
+.loginform {
+  width: 400px;
+  height: 160px;
+  background: #444444;
+}
+
+input {
+  position: absolute;
+  width: 168px;
+  height: 32px;
+  left: 16px;
+  border: none;
+  background: #222222;
+  padding-left: 32px;
+  color: rgba(255, 255, 255, 0.655);
+}
+
+input:focus {
+  outline: none;
+}
+
+.lgnbtn {
+  position: absolute;
+  width: 168px;
+  height: 32px;
+  left: 16px;
+  top: 112px;
+  border: none;
+  background: #56BF8D;
+  color: white;
+  text-align: center;
+  padding-top: 3px;
+  cursor: pointer;
+}
+
+.lgnbtn:hover {
+  background: #79efb6;
+}
+
+.username {
+
+  top: 16px;
+
+}
+
+.userIcon {
+  position: absolute;
+  left: 24px;
+  top: 24px;
+}
+
+.password {
+  top: 64px;
+}
+
+.PassIcon {
+  position: absolute;
+  left: 24px;
+  top: 72px;
+}
+
+.lgntxt {
+  position: absolute;
+  width: 168px;
+  height: 32px;
+  left: 216px;
+  top: 112px;
+
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  /* or 133% */
+
+  text-align: center;
+
+  color: #888888;
+}
+
+.lgnpad {
+  position: absolute;
+  left: 200px;
+  top: 0px;
+  width: 200px;
+  height: 160px;
+  background: #3e3e3e;
+}
+
+.membershipPane {
+  width: 400px;
+  height: 64px;
+  background: #444444;
+}
+
+.calenIcon {
+  position: absolute;
+  left: 8px;
+  top: 12px;
+}
+
+.ReplaIcon {
+  position: absolute;
+  left: 8px;
+  top: 36px;
+}
+
+.remaindays {
+  position: absolute;
+  left: 32px;
+  top: 12px;
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  /* identical to box height, or 133% */
+
+  letter-spacing: -0.04em;
+  color: #BBBBBB;
+}
+
+.replacements {
+  position: absolute;
+  left: 32px;
+  top: 36px;
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  /* identical to box height, or 133% */
+
+  letter-spacing: -0.04em;
+  color: #BBBBBB;
+}
+
+.messagetitle {
+  position: absolute;
+  left: 32px;
+  top: 8px;
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  /* identical to box height, or 133% */
+
+  letter-spacing: -0.04em;
+  color: #BBBBBB;
+}
+
+.messagepane {
+  /* position: absolute; */
+  position: relative;
+  width: 400px;
+  height: 32px;
+  /* border-top: 2px solid #242424;
+  border-bottom: 2px solid #242424; */
+  background: #444444;
+  cursor: pointer;
+
+}
+
+.checkpane {
+  /* position: absolute; */
+  position: relative;
+  width: 400px;
+  height: 32px;
+  /* border-top: 2px solid #242424;
+  border-bottom: 2px solid #242424; */
+  background: #282c34;
+}
+
+.msgsubcontent {
+  padding: 32px;
+  height: 200px;
+}
+
+.msgcontent {
+  transition: all;
+  overflow: hidden;
+  position: relative;
+  width: 400px;
+  height: 200px;
+  background: #444444;
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 24px;
+  /* or 171% */
+
+  letter-spacing: -0.04em;
+
+
+  color: #BBBBBB;
+  animation: mymove 0.4s;
+  overflow-y: auto;
+}
+
+
+@keyframes mymove {
+  from {
+    height: 0px;
+  }
+
+  to {
+    height: 200px;
+  }
+}
+
+
+
+.msgcontent::-webkit-scrollbar-thumb {
+  background: #777777;
+}
+
+.msgcontent::-webkit-scrollbar {
+  width: 10px;
+  /* height: 98px; */
+  background: #656565;
+  display: block;
+  /* or add it to the track */
+}
+
+.messagepane:hover {
+  background: black;
+}
+
+.msgIcon {
+  position: absolute;
+  left: 8px;
+  top: 8px;
+}
+
+.stream {
+  height: 64px;
+  position: absolute;
+  top: 0px;
+  right: 150px;
+}
+
+.streamlgnbtn:hover {
+  background: #79efb6;
+}
+
+.streamlgnbtn {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: 128px;
+  height: 64px;
+  background: #56BF8D;
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 16px;
+  /* identical to box height, or 133% */
+
+  text-align: center;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+
+  color: #000000;
+
+  padding-top: 25px;
+  cursor: pointer;
+}
+
+.lgnIcon {
+  position: absolute;
+  right: 16px;
+  top: 24px;
+}
+
+.line {
+  position: relative;
+  height: 2px;
+  background: black;
+}
+
+.tostream {
+  height: 100px;
+  background: black;
+  display: flex;
+}
+
+.icons {
+  width: 15%;
+  margin: auto;
+  cursor: pointer;
+}
+
+.icons:hover {
+  width: 17%;
+}
+
+.extitle {
+  padding-top: 10px;
+  text-align: center;
+  background: black;
+  font-family: cursive;
+  color: white
+}
+
+.sneaky {
+  padding-left: 5px;
+  padding-right: 5px;
+  display: inline;
+  color: #56BF8D;
+  cursor: pointer;
+}

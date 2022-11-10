@@ -1,9 +1,25 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import axios from "axios";
+import './Popup.css'
+
+import UserIcon from '../../assets/img/User, Profile, Add 1.png'
+import PassIcon from '../../assets/img/lock 1.png'
+import CalenIcon from '../../assets/img/calendar-schedule 1.png'
+import ReplaIcon from '../../assets/img/refresh-rotate 1.png'
+import MsgIcon from '../../assets/img/Messages, Chat 1.png'
+import checkIcon from '../../assets/img/checkmark-circle-1 1.png'
+import lgnIcon from '../../assets/img/login-logout-arrow.png'
+
+import disneyplusIcon from '../../assets/img/disneyplus.png'
+import netflixIcon from '../../assets/img/netflix.png'
+import crunchyrollIcon from '../../assets/img/crunchyroll.png'
+import daznIcon from '../../assets/img/dazn.png'
+import hbomaxIcon from '../../assets/img/hbomax.png'
 
 
 const Popup = () => {
+  const [loading, setLoading] = useState(false);
   const [navigate, setNavigate] = useState(false)
 
   const [user, setUser] = useState()
@@ -11,15 +27,30 @@ const Popup = () => {
   const [ip, setIp] = useState()
 
   const [membership, setMembership] = useState()
-  const [globalMsg, setGlobalMsg] = useState('Hello!')
+  const [globalMsg, setGlobalMsg] = useState('')
   const [url, setUrl] = useState()
   const [replacements, setReplacements] = useState()
-  const [days, setDays] = useState(30)
+  const [days, setDays] = useState()
   const [errormsg, setErrorMsg] = useState('')
+
+  const [isSupport, setSupport] = useState(false)
+
+  const [messagetitle, setVisible] = useState('Show messages')
+  const [Icon, setIcon] = useState()
+
+  const streams = [
+    'hbomax',
+    'netflix',
+    'disneyplus',
+    'crunchyroll',
+    'dazn'
+  ]
+
+
 
   const signin = async () => {
 
-    const response = await axios.post('http://localhost:5000/membership/signin', {
+    const response = await axios.post('http://3.141.40.201:3000/membership/signin', {
       user: user,
       password: password,
       ip: ip
@@ -56,82 +87,163 @@ const Popup = () => {
 
   useEffect(async () => {
 
-    const membership = (await chrome.storage.sync.get("membership")).membership
-    const ip = (await chrome.storage.sync.get("ip")).ip
 
-    setMembership(membership)
-    setIp(ip)
 
-    chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
-      setUrl((new URL(tabs[0].url)).hostname)
-    });
-    const response = await axios.get('http://localhost:5000/msgs')
-    setGlobalMsg(response.data.globalMsg)
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+      // alert((new URL(tabs[0].url)).hostname)
+      streams.forEach(async (stream) => {
+        if ((new URL(tabs[0].url)).hostname.includes(stream + '.com')) {
+          // chrome.tabs.sendMessage(tabs[0].id, { message: 'check' });
+          setLoading(true)
 
-    if (membership != 'new') {
-      const stream = (await chrome.storage.sync.get("stream")).stream
-      const membershipData = await axios.post('http://localhost:5000/membership/data',
-        {
-          stream: stream,
-          ip: ip
+          const ip = await (await axios.get('https://api.ipify.org/?format=json')).data.ip
+          await chrome.storage.sync.set({ ip })
+          await chrome.storage.sync.set({ stream })
+
+
+          if (stream == 'disneyplus')
+            setIcon(disneyplusIcon)
+          if (stream == 'netflix')
+            setIcon(netflixIcon)
+          if (stream == 'hbomax')
+            setIcon(hbomaxIcon)
+          if (stream == 'crunchyroll')
+            setIcon(crunchyrollIcon)
+          if (stream == 'dazn')
+            setIcon(daznIcon)
+
+          const membershipState = await axios.post('http://3.141.40.201:3000/membership',
+            {
+              stream: stream,
+              ip: ip
+            }
+          )
+          const membership = membershipState.data.response
+          await chrome.storage.sync.set({ membership })
+
+          if (membership != 'new') {
+            // const stream = (await chrome.storage.sync.get("stream")).stream
+            const response = await axios.get('http://3.141.40.201:3000/msgs')
+            setGlobalMsg(response.data.globalMsg)
+            const membershipData = await axios.post('http://3.141.40.201:3000/membership/data',
+              {
+                stream: stream,
+                ip: ip
+              }
+            )
+            setReplacements(membershipData.data.replacements)
+            if (membershipData.data.days != null)
+              setDays(membershipData.data.days)
+
+          }
+
+          setMembership(membership)
+          setIp(ip)
+
+          setLoading(false)
+          setSupport(true)
         }
-      )
-      setReplacements(membershipData.data.replacements)
-      if (membershipData.data.days != null)
-        setDays(membershipData.data.days)
-    }
+      })
 
-  })
+    });
+
+    // const membership = (await chrome.storage.sync.get("membership")).membership
+    // alert(membership)
+    // const ip = (await chrome.storage.sync.get("ip")).ip
+    // setMembership(membership)
+    // setIp(ip)
+
+    // chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
+    //   setUrl((new URL(tabs[0].url)).hostname)
+    // });
+
+
+
+
+
+
+  }, [])
 
   return (
-    <div className='has-background-black has-text-centered'>
-      <div className="subtitle mt-0 pt-3 has-text-white" style={{ "fontWeight": "bold" }}>Account Login Extension</div>
-      {
-        membership != 'new' ? (<div>
-          <div className="m-auto has-background-primary has-text-white">Extension Dashboard</div>
-          <div className="has-background-link has-text-white mt-0 pl-3 pr-3 pt-3 pb-3">
-            <div className='ml-3' style={{ "textAlign": "left", "fontWeight": "bold" }}>ADMIN MESSAGE</div>
-            {globalMsg}
-          </div>
-          <div className='has-background-white pb-3 pt-3'>
-            <div className='is-flex'>
-              <div className='m-auto' style={{ "textAlign": "left", "fontWeight": "bold" }}>REPLACEMENTS</div>
-              <div className='m-auto' style={{ "textAlign": "right", "fontWeight": "bold" }}>REMAININGDAY</div>
-            </div>
-            <div className='is-flex'>
-              <div className='box has-background-primary has-text-white m-auto pt-0' style={{ "width": "40%", "height": "50px", "fontSize": "30px", "fontWeight": "bold" }}>{replacements}</div>
-              <div className='box has-background-primary has-text-white m-auto pt-0' style={{ "width": "40%", "height": "50px", "fontSize": "30px", "fontWeight": "bold" }}>{days}</div>
-            </div>
-          </div>
-          <div className="mt-5 pt-3 pb-3 has-background-info has-text-white is-clickable" onClick={() => loginToStream()} style={{ "fontWeight": "bold" }}>Login</div>
+    <div>
+      {isSupport ? (<div>
 
-          <div>{url}</div>
+        {(membership != 'new') ? (<div>
+          <div className='membershipPane'>
+            <img className='calenIcon' src={CalenIcon}></img>
+            <div className='remaindays'>{days} days left</div>
+            <img className='ReplaIcon' src={ReplaIcon}></img>
+            <div className='replacements'>{replacements} replacements left</div>
+            <img className='stream' src={Icon}></img>
+            <div className='streamlgnbtn' onClick={() => loginToStream()} >LOGIN</div>
+            <img className='lgnIcon' src={lgnIcon}></img>
+          </div>
+          <div>
+            <div className='line'></div>
+            <div className='messagepane' onClick={() => {
+              if (messagetitle == 'Hide messages')
+                setVisible('Show messages')
+              else
+                setVisible('Hide messages')
+            }}>
+              <img className='msgIcon' src={MsgIcon}></img>
+              <div className='messagetitle'>{messagetitle}</div>
+            </div>
+            <div className='line'></div>
+
+            {
+              messagetitle == 'Show messages' ? (<></>) : (
+                <div className='msgcontent'>
+                  <div className='msgsubcontent'>
+                    {globalMsg}
+                  </div>
+                </div>
+              )
+            }
+
+          </div>
+          <div className='checkpane'>
+            <img className='msgIcon' src={checkIcon}></img>
+            <div className='messagetitle'>Your membership is active until 31 March 2024</div>
+          </div>
         </div>) : (<div>
-          <p className="m-auto has-background-primary has-text-white">Sign in to Extension</p>
-          <div className="box is-radiusless">
-            <div className="field">
-              <label className="label">User</label>
-              <div className="control">
-                <input className="input" type="text"
-                  onChange={(e) => setUser(e.target.value)}
-                  placeholder="User" />
-              </div>
-            </div>
-
-            <div className="field">
-              <label className="label">Password</label>
-              <div className="control">
-                <input className="input" type="password"
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Password" />
-              </div>
-            </div>
-            <div className='label has-text-danger'>{errormsg}</div>
-            <button className="button is-primary" onClick={() => signin()}>Sign in</button>
+          <div className='loginform'>
+            <input className='username' onChange={(e) => setUser(e.target.value)} placeholder='Username'>
+            </input>
+            <img className='userIcon' src={UserIcon}></img>
+            <input className='password' onChange={(e) => setPassword(e.target.value)} placeholder='Password'>
+            </input>
+            <img className='PassIcon' src={PassIcon}></img>
+            <div className='lgnbtn' onClick={() => signin()}>LOGIN</div>
           </div>
-        </div>)
-      }
+          <div className='lgnpad'></div>
+          <div className='lgntxt'>Sometimes you need to log in to see the magic happen</div>
+        </div>)}
+
+
+
+      </div>) : (<div >
+        <div className='extitle'>Welcome to
+          <div className='sneaky'>Sneaky</div>!
+        </div>
+        <div className='tostream'>
+          <a href="https://disneyplus.com"
+            target="_blank" className='icons'><img src={disneyplusIcon}></img></a>
+          <a href="https://netflix.com"
+            target="_blank" className='icons'><img src={netflixIcon}></img></a>
+          <a href="https://hbomax.com"
+            target="_blank" className='icons'><img src={hbomaxIcon}></img></a>
+          <a href="https://crunchyroll.com"
+            target="_blank" className='icons'><img src={crunchyrollIcon}></img></a>
+          <a href="https://dazn.com"
+            target="_blank" className='icons'><img src={daznIcon}></img></a>
+        </div>
+
+        {loading ? (<progress className="progress is-small is-primary is-radiusless" max="100">15%</progress>) : (<></>)}
+      </div>)}
+
     </div>
+
   );
 };
 
