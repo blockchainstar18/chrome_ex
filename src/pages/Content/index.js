@@ -441,11 +441,8 @@ window.onload = async function () {
             )
 
 
-
             waitForElm('.css-175oi2r r-1loqt21 r-1otgn73 r-173mn98 r-1niwhzg r-1mwlp6a r-1777fci r-u8s1d r-usgzl9').then((elm) => {
-                console.log('Element is ready');
-                document.getElementsByClassName('css-175oi2r r-1loqt21 r-1otgn73 r-173mn98 r-1niwhzg r-1mwlp6a r-1777fci r-u8s1d r-usgzl9')[0]
-                    .remove()
+                elm.remove()
             });
 
             await chrome.storage.sync.set({ hbomaxlogin: false });
