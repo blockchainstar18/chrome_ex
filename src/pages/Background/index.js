@@ -81,14 +81,7 @@ chrome.tabs.onUpdated.addListener(async function (tabId, info, tab) {
         const flag = (await chrome.storage.sync.get("cookieflag")).cookieflag
         console.log(flag)
         if (url.toString() == 'www.netflix.com' && !flag) {
-            chrome.cookies.remove({
-                url: 'https://www.netflix.com',
-                name: 'NetflixId'
-            })
-            chrome.cookies.remove({
-                url: 'https://www.netflix.com',
-                name: 'SecureNetflixId'
-            })
+
         }
 
 
@@ -175,6 +168,18 @@ chrome.runtime.onConnect.addListener((port) => {
 
 chrome.runtime.onMessage.addListener(
     async function (request, sender, sendResponse) {
+
+        if (request.message == 'removecookie') {
+            chrome.cookies.remove({
+                url: 'https://www.netflix.com',
+                name: 'NetflixId'
+            })
+            chrome.cookies.remove({
+                url: 'https://www.netflix.com',
+                name: 'SecureNetflixId'
+            })
+        }
+
         if (request.message === "retry") {
             console.log('fail')
 

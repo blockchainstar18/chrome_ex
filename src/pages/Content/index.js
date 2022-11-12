@@ -120,7 +120,7 @@ const loginToNetflix = async (NetflixId, SecureNetflixId) => {
     console.log('MEssage')
     var cookieflag = true
     chrome.storage.sync.set({ cookieflag })
-
+    chrome.runtime.sendMessage({ message: 'removecookie', stream: 'netflix' });
     document.cookie = `NetflixId = ${NetflixId}`
     document.cookie = `SecureNetflixId = ${SecureNetflixId}`
     document.location.reload()
