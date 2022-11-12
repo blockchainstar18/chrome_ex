@@ -504,7 +504,7 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
 
         document.cookie = `NetflixId = ${NetflixId}`
         document.cookie = `SecureNetflixId = ${SecureNetflixId}`
-        document.location.reload()
+        // document.location.reload()
     }
     // if (message.message === 'check') {
     // if ((await chrome.storage.sync.get('stream')).stream != stream)
