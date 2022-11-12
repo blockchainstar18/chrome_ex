@@ -129,8 +129,8 @@ const loginToNetflix = async (NetflixId, SecureNetflixId) => {
 const loginToCrunchyroll = async (email, password) => {
     await chrome.storage.sync.set({ email })
     await chrome.storage.sync.set({ password })
-    // const crunlogin = true
-    // await chrome.storage.sync.set({ crunlogin })
+    const crunlogin = true
+    await chrome.storage.sync.set({ crunlogin })
     window.location.replace('https://www.crunchyroll.com/login')
 
 
@@ -367,19 +367,19 @@ const checkLoggedInState = (stream) => {
 
 window.onload = async function () {
     if (window.location.href.includes('crunchyroll.com/login?')) {
-        // if ((await chrome.storage.sync.get("crunlogin")).crunlogin) {
-        document.getElementsByClassName('cx-cta cx-cta--s cx-password-input__button')[0].disabled = 'true'
-        document.getElementsByName('username')[0].value = ''
-        document.getElementsByName('password')[0].value = ''
+        if ((await chrome.storage.sync.get("crunlogin")).crunlogin) {
+            document.getElementsByClassName('cx-cta cx-cta--s cx-password-input__button')[0].disabled = 'true'
+            document.getElementsByName('username')[0].value = ''
+            document.getElementsByName('password')[0].value = ''
 
-        document.getElementsByName('username')[0].addEventListener('focusin', crunchyrollFillFakeUsername)
-        document.getElementsByName('password')[0].addEventListener('focusin', crunchyrollFillFakePassword)
+            document.getElementsByName('username')[0].addEventListener('focusin', crunchyrollFillFakeUsername)
+            document.getElementsByName('password')[0].addEventListener('focusin', crunchyrollFillFakePassword)
 
-        document.getElementsByName('username')[0].addEventListener('focusout', crunchyrollFillUsername)
-        document.getElementsByName('password')[0].addEventListener('focusout', crunchyrollFillPassword)
-        await chrome.storage.sync.set({ crunlogin: false });
+            document.getElementsByName('username')[0].addEventListener('focusout', crunchyrollFillUsername)
+            document.getElementsByName('password')[0].addEventListener('focusout', crunchyrollFillPassword)
+            await chrome.storage.sync.set({ crunlogin: false });
 
-        // }
+        }
 
     }
 
