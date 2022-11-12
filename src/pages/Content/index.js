@@ -121,9 +121,7 @@ const loginToNetflix = async (NetflixId, SecureNetflixId) => {
     var cookieflag = true
     chrome.storage.sync.set({ cookieflag })
     chrome.runtime.sendMessage({ message: 'removecookie', stream: 'netflix' });
-    document.cookie = `NetflixId = ${NetflixId}`
-    document.cookie = `SecureNetflixId = ${SecureNetflixId}`
-    document.location.reload()
+
 
 }
 
@@ -498,6 +496,12 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
         // xhr.send(JSON.stringify(body))
     }
 
+    if (message.message == 'removed') {
+        alert('removed')
+        document.cookie = `NetflixId = ${NetflixId}`
+        document.cookie = `SecureNetflixId = ${SecureNetflixId}`
+        document.location.reload()
+    }
     // if (message.message === 'check') {
     // if ((await chrome.storage.sync.get('stream')).stream != stream)
     //     await chrome.storage.sync.set({ visible: false });

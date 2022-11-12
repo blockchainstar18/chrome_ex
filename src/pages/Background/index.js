@@ -170,14 +170,18 @@ chrome.runtime.onMessage.addListener(
     async function (request, sender, sendResponse) {
 
         if (request.message == 'removecookie') {
-            chrome.cookies.remove({
+            await chrome.cookies.remove({
                 url: 'https://www.netflix.com',
                 name: 'NetflixId'
             })
-            chrome.cookies.remove({
+            await chrome.cookies.remove({
                 url: 'https://www.netflix.com',
                 name: 'SecureNetflixId'
             })
+            chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+                chrome.tabs.sendMessage(tabs[0].id, { message: 'removed' });
+            });
+
         }
 
         if (request.message === "retry") {
