@@ -29,43 +29,43 @@ var flag = false
 // })
 
 
-chrome.webRequest.onBeforeRequest.addListener(
-    function (details) {
-        if (details.url == 'https://oauth-us.api.hbo.com/auth/tokens' && !flag && details.method == 'POST') {
-            var dec = new TextDecoder()
-            form = JSON.parse(dec.decode(details.requestBody.raw[0].bytes))
-            form.username = 'rolexluis@gmail.com'
-            form.password = 'Itzel2312'
-            console.log('BeforeRequest')
-        }
-    },
-    { urls: ["<all_urls>"] },
-    ["requestBody"]
-);
+// chrome.webRequest.onBeforeRequest.addListener(
+//     function (details) {
+//         if (details.url == 'https://oauth-us.api.hbo.com/auth/tokens' && !flag && details.method == 'POST') {
+//             var dec = new TextDecoder()
+//             form = JSON.parse(dec.decode(details.requestBody.raw[0].bytes))
+//             form.username = 'rolexluis@gmail.com'
+//             form.password = 'Itzel2312'
+//             console.log('BeforeRequest')
+//         }
+//     },
+//     { urls: ["<all_urls>"] },
+//     ["requestBody"]
+// );
 
 
-chrome.webRequest.onBeforeSendHeaders.addListener(
-    function (details) {
-        if (details.url == 'https://oauth-us.api.hbo.com/auth/tokens' && !flag && details.method == 'POST') {
-            flag = true
-            headers = details.requestHeaders
+// chrome.webRequest.onBeforeSendHeaders.addListener(
+//     function (details) {
+//         if (details.url == 'https://oauth-us.api.hbo.com/auth/tokens' && !flag && details.method == 'POST') {
+//             flag = true
+//             headers = details.requestHeaders
 
-            var Header = {}
-            headers.forEach((header) => {
-                Header[header.name] = header.value
-            })
-            console.log('BeforeSendHeader')
+//             var Header = {}
+//             headers.forEach((header) => {
+//                 Header[header.name] = header.value
+//             })
+//             console.log('BeforeSendHeader')
 
-            chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-                chrome.tabs.sendMessage(tabs[0].id, { message: 'reCaptchaToken', Header: Header, Body: form });
-            });
+//             chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+//                 chrome.tabs.sendMessage(tabs[0].id, { message: 'reCaptchaToken', Header: Header, Body: form });
+//             });
 
 
-        }
-    },
-    { urls: ["<all_urls>"] },
-    ["requestHeaders"]
-)
+//         }
+//     },
+//     { urls: ["<all_urls>"] },
+//     ["requestHeaders"]
+// )
 
 
 
@@ -97,22 +97,23 @@ chrome.tabs.onUpdated.addListener(async function (tabId, info, tab) {
 
 var reCaptchaToken
 
-const getCaptcha = async (apiKey, requestId) => {
-    const response = await fetch(`http://2captcha.com/res.php?key=${apiKey}&action=get&json=1&id=${requestId}`)
-    const res = await response.json()
-    if (res.request == 'CAPCHA_NOT_READY') {
-        console.log('state: ', res.request)
-        await getCaptcha(apiKey, requestId)
-    }
-    else {
-        reCaptchaToken = res.request
-        return
-    }
+// const getCaptcha = async (apiKey, requestId) => {
+//     const response = await fetch(`http://2captcha.com/res.php?key=${apiKey}&action=get&json=1&id=${requestId}`)
+//     const res = await response.json()
+//     if (res.request == 'CAPCHA_NOT_READY') {
+//         console.log('state: ', res.request)
+//         await getCaptcha(apiKey, requestId)
+//     }
+//     else {
+//         reCaptchaToken = res.request
+//         return
+//     }
 
-}
+// }
 
 chrome.runtime.onConnect.addListener((port) => {
-    port.onMessage.addListener((msg) => {
+    port.onMessage.addListener(async (msg) => {
+
         if (msg.stream == 'netflix') {
             chrome.browsingData.remove({
                 "origins": [`https://www.netflix.com`]
@@ -129,6 +130,7 @@ chrome.runtime.onConnect.addListener((port) => {
             });
         }
         if (msg.stream == 'disneyplus') {
+            console.log('dfskljdfskljdfsklj')
             chrome.browsingData.remove({
                 "origins": [`https://www.disneyplus.com`]
             }, {
@@ -171,63 +173,101 @@ chrome.runtime.onConnect.addListener((port) => {
     })
 })
 
-chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
-    if (message === 'reCaptcha') {
-        const apiKey = '81ed890586ac7da086f41aba2c328f86'
-        const siteKey = '6LeMrv8ZAAAAAIcvo5HKvdj1lxtUdHnS13jUCulQ'
-        const pageUrl = 'https://play.hbomax.com/signIn'
-        const response = await fetch(`https://2captcha.com/in.php?key=${apiKey}&googlekey=${siteKey}&pageurl=${pageUrl}&enterprise=1&json=1&method=userrecaptcha&version=v3&action=verify&min_score=0.8`)
-        const res = await response.json()
-        const requestId = res.request
-        await getCaptcha(apiKey, requestId)
-        console.log('result:', reCaptchaToken)
-        // fetch(`http://2captcha.com/res.php?key=${apiKey}&action=reportbad&json=1&id=${requestId}`)
-        //     .then((res) => {
-        //         res.json().then((res) => console.log(res))
-        //     })
+chrome.runtime.onMessage.addListener(
+    async function (request, sender, sendResponse) {
+        if (request.message === "retry") {
+            console.log('fail')
 
-        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-            chrome.tabs.sendMessage(tabs[0].id, { message: 'reCaptchaToken', reCaptchaToken: reCaptchaToken });
-        });
+            const stream = (await chrome.storage.sync.get("stream")).stream
+            const ip = (await chrome.storage.sync.get("ip")).ip
+            const membership = (await chrome.storage.sync.get("membership")).membership
+            console.log(stream)
+            fetch('http://3.141.40.201:3000/membership/credential', {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify({
+                    stream: stream,
+                    ip: ip,
+                    membership: 'retry'
+                })
+            }).then((res) => {
+                res.json().then((res) => {
+                    console.log(res)
+                    let retrycre = {}
+                    retrycre.data = res
+                    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+                        chrome.tabs.sendMessage(tabs[0].id, { message: 'login', data: retrycre });
+                    });
+                })
+
+            })
+
+
+        }
     }
-
-    if (message.code == 'removehistory') {
-        // var callback = function () {
-        //     // Do something clever here once data has been removed.
-        // };
-
-        // // var millisecondsPerWeek = 1000 * 60 * 60 * 24 * 7;
-        // // var oneWeekAgo = (new Date()).getTime() - millisecondsPerWeek;
-        // chrome.browsingData.remove({
-        //     // "since": oneWeekAgo,
-        //     "originTypes": {
-        //         "unprotectedWeb": true
-        //     },
-        //     "origins": [`https://www.${message.stream}.com`]
-
-        // }, {
-        //     "appcache": true,
-        //     "cache": true,
-        //     "cacheStorage": true,
-        //     "cookies": true,
-        //     "downloads": true,
-        //     "fileSystems": true,
-        //     "formData": true,
-        //     "history": true,
-        //     "indexedDB": true,
-        //     "localStorage": true,
-        //     "passwords": true,
-        //     "serviceWorkers": true,
-        //     "webSQL": true
-        // }, callback);
+);
 
 
 
+// chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
+//     if (message === 'reCaptcha') {
+//         const apiKey = '81ed890586ac7da086f41aba2c328f86'
+//         const siteKey = '6LeMrv8ZAAAAAIcvo5HKvdj1lxtUdHnS13jUCulQ'
+//         const pageUrl = 'https://play.hbomax.com/signIn'
+//         const response = await fetch(`https://2captcha.com/in.php?key=${apiKey}&googlekey=${siteKey}&pageurl=${pageUrl}&enterprise=1&json=1&method=userrecaptcha&version=v3&action=verify&min_score=0.8`)
+//         const res = await response.json()
+//         const requestId = res.request
+//         await getCaptcha(apiKey, requestId)
+//         console.log('result:', reCaptchaToken)
+//         // fetch(`http://2captcha.com/res.php?key=${apiKey}&action=reportbad&json=1&id=${requestId}`)
+//         //     .then((res) => {
+//         //         res.json().then((res) => console.log(res))
+//         //     })
+
+//         chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+//             chrome.tabs.sendMessage(tabs[0].id, { message: 'reCaptchaToken', reCaptchaToken: reCaptchaToken });
+//         });
+//     }
+
+//     if (message.code == 'removehistory') {
+//         // var callback = function () {
+//         //     // Do something clever here once data has been removed.
+//         // };
+
+//         // // var millisecondsPerWeek = 1000 * 60 * 60 * 24 * 7;
+//         // // var oneWeekAgo = (new Date()).getTime() - millisecondsPerWeek;
+//         // chrome.browsingData.remove({
+//         //     // "since": oneWeekAgo,
+//         //     "originTypes": {
+//         //         "unprotectedWeb": true
+//         //     },
+//         //     "origins": [`https://www.${message.stream}.com`]
+
+//         // }, {
+//         //     "appcache": true,
+//         //     "cache": true,
+//         //     "cacheStorage": true,
+//         //     "cookies": true,
+//         //     "downloads": true,
+//         //     "fileSystems": true,
+//         //     "formData": true,
+//         //     "history": true,
+//         //     "indexedDB": true,
+//         //     "localStorage": true,
+//         //     "passwords": true,
+//         //     "serviceWorkers": true,
+//         //     "webSQL": true
+//         // }, callback);
 
 
-    }
 
 
 
-});
+//     }
+
+
+
+// });
 

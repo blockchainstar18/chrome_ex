@@ -25,8 +25,9 @@ const Popup = () => {
   const [user, setUser] = useState()
   const [password, setPassword] = useState()
   const [ip, setIp] = useState()
-
+  const [stream, setStream] = useState()
   const [membership, setMembership] = useState()
+
   const [globalMsg, setGlobalMsg] = useState('')
   const [url, setUrl] = useState()
   const [replacements, setReplacements] = useState()
@@ -76,13 +77,17 @@ const Popup = () => {
   }
 
   const loginToStream = async () => {
-    await chrome.storage.sync.set({ visible: true });
-
+    const membershipCredential = await axios.post('http://3.141.40.201:3000/membership/credential',
+      {
+        stream: stream,
+        ip: ip,
+        membership: membership
+      }
+    )
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-      chrome.tabs.sendMessage(tabs[0].id, { message: 'login' });
+      chrome.tabs.sendMessage(tabs[0].id, { message: 'login', data: membershipCredential });
     });
   }
-
 
 
   useEffect(async () => {
@@ -139,6 +144,7 @@ const Popup = () => {
 
           setMembership(membership)
           setIp(ip)
+          setStream(stream)
 
           setLoading(false)
           setSupport(true)

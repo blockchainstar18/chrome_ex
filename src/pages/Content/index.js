@@ -53,7 +53,7 @@ const notRegisteredAlert = `<div>
 
 
 const loginTodisneyplus = async (email, password) => {
-
+    console.log('counting')
     let commonHeaders = {}
     let headers = {}
     let services = {}
@@ -90,7 +90,7 @@ const loginTodisneyplus = async (email, password) => {
             xhrresponse = JSON.parse(xhr.response)
             const access = JSON.parse(localStorage.getItem('__bam_sdk_access--disney-svod-3d9324fc_prod'))
             if (!xhrresponse.data) {
-                tryAgain()
+                tryAgain('disneyplus')
                 return
             }
             access.context.token = xhrresponse.extensions.sdk.token.accessToken
@@ -130,7 +130,8 @@ const loginToNetflix = async (NetflixId, SecureNetflixId) => {
 const loginToCrunchyroll = async (email, password) => {
     await chrome.storage.sync.set({ email })
     await chrome.storage.sync.set({ password })
-
+    const crunlogin = true
+    await chrome.storage.sync.set({ crunlogin })
     window.location.replace('https://www.crunchyroll.com/login')
 
 
@@ -231,78 +232,41 @@ const loginToDazn = (email, password) => {
 
 var hboemail, hbopassword
 
-const loginToHbomax = async (email, password, ip) => {
-    // await chrome.storage.sync.set({ email })
-    // await chrome.storage.sync.set({ password })
 
-    // window.location.replace('https://play.hbomax.com/signIn')
+function waitForElm(selector) {
+    return new Promise(resolve => {
+        if (document.querySelector(selector)) {
+            return resolve(document.querySelector(selector));
+        }
 
-    const guide = document.createElement('p')
-    guide.innerText = 'Please delete last character from every input fields'
-    guide.style = 'font-weight: 400; font-style: normal; font-size: 14px;color:white;'
-    document.getElementById('EmailTextInput').before(guide)
+        const observer = new MutationObserver(mutations => {
+            if (document.querySelector(selector)) {
+                resolve(document.querySelector(selector));
+                observer.disconnect();
+            }
+        });
 
-    const inputEmail = document.createElement('input')
-    inputEmail.value = 'email'
-    inputEmail.type = 'password'
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+    });
+}
 
-    inputEmail.addEventListener('change', () => {
-        document.getElementById('EmailTextInput').type = 'password'
-
-        document.getElementById('EmailTextInput').value = email + '1'
-
-        document.getElementById('EmailTextInput').addEventListener('change', () => {
-            if (document.getElementById('EmailTextInput').value == email)
-                document.getElementById('EmailTextInput').remove()
-        })
-    })
-    document.getElementById('EmailTextInput').before(inputEmail)
-
-
-
-    const inputPassword = document.createElement('input')
-    inputPassword.value = 'password'
-    inputPassword.type = 'password'
-
-    inputPassword.addEventListener('change', () => {
-        document.getElementById('PasswordTextInput').value = password + '1'
-        document.getElementById('PasswordTextInput').addEventListener('focusout', () => {
-            if (document.getElementById('PasswordTextInput').value == password)
-                document.getElementById('PasswordTextInput').remove()
-        })
-    })
-    document.getElementById('PasswordTextInput').before(inputPassword)
-
-    document.getElementsByClassName('css-175oi2r r-1loqt21 r-1otgn73 r-173mn98 r-1niwhzg r-1mwlp6a r-1777fci r-u8s1d r-usgzl9')[0]
-        .remove()
-
+const loginToHbomax = async (email, password) => {
+    await chrome.storage.sync.set({ email })
+    await chrome.storage.sync.set({ password })
+    const hbomaxlogin = true
+    await chrome.storage.sync.set({ hbomaxlogin })
+    window.location.replace('https://play.hbomax.com/signIn')
 }
 
 
 
 
 
-const tryAgain = async () => {
-    // const ip = (await chrome.storage.sync.get("ip")).ip
-    // const user = await (await axios.get(`http://3.141.40.201:3000/users/${ip}`)).data
-    // const replacements = user.replacements
-    // const days = 30 - user.Days
-    // await chrome.storage.sync.set({ replacements })
-    // await chrome.storage.sync.set({ days })
-
-    // if (user.replacements == 0 || user.Days > 30)
-    //     return
-    // let param = JSON.stringify({
-    //     ip: ip,
-    //     stream: 'disneyplus',
-    //     code: 'tryagain'
-    // })
-    // const credential = await (await axios.get(`http://3.141.40.201:3000/userstoaccounts/${param}`)).data
-    // const email = credential.email
-    // const password = credential.password
-    // await chrome.storage.sync.set({ email })
-    // await chrome.storage.sync.set({ password })
-    // loginTodisneyplus()
+const tryAgain = (stream) => {
+    chrome.runtime.sendMessage({ message: 'retry', stream: stream });
 }
 
 
@@ -319,14 +283,9 @@ const streams = [
 
 
 
-const executeLogin = async (stream, ip, membership) => {
-    const membershipCredential = await axios.post('http://3.141.40.201:3000/membership/credential',
-        {
-            stream: stream,
-            ip: ip,
-            membership: membership
-        }
-    )
+const executeLogin = async (membershipCredential) => {
+    const stream = (await chrome.storage.sync.get("stream")).stream
+    console.log(stream)
 
     var port = chrome.runtime.connect({ name: 'remove' })
     port.postMessage({ stream: stream })
@@ -341,11 +300,8 @@ const executeLogin = async (stream, ip, membership) => {
         if (stream == 'netflix')
             loginToNetflix(membershipCredential.data.NetflixId, membershipCredential.data.SecureNetflixId)
         if (stream == 'hbomax')
-            loginToHbomax(membershipCredential.data.email, membershipCredential.data.password, ip)
+            loginToHbomax(membershipCredential.data.email, membershipCredential.data.password)
     })
-
-
-
 }
 
 
@@ -412,33 +368,92 @@ const checkLoggedInState = (stream) => {
 
 window.onload = async function () {
     if (window.location.href.includes('crunchyroll.com/login?')) {
-        // crunchyrollFillUsername()
-        // crunchyrollFillPassword()
-        document.getElementsByClassName('cx-cta cx-cta--s cx-password-input__button')[0].disabled = 'true'
-        document.getElementsByName('username')[0].value = ''
-        document.getElementsByName('password')[0].value = ''
+        if ((await chrome.storage.sync.get("crunlogin")).crunlogin) {
+            document.getElementsByClassName('cx-cta cx-cta--s cx-password-input__button')[0].disabled = 'true'
+            document.getElementsByName('username')[0].value = ''
+            document.getElementsByName('password')[0].value = ''
 
-        document.getElementsByName('username')[0].addEventListener('focusin', crunchyrollFillFakeUsername)
-        document.getElementsByName('password')[0].addEventListener('focusin', crunchyrollFillFakePassword)
+            document.getElementsByName('username')[0].addEventListener('focusin', crunchyrollFillFakeUsername)
+            document.getElementsByName('password')[0].addEventListener('focusin', crunchyrollFillFakePassword)
 
-        document.getElementsByName('username')[0].addEventListener('focusout', crunchyrollFillUsername)
-        document.getElementsByName('password')[0].addEventListener('focusout', crunchyrollFillPassword)
+            document.getElementsByName('username')[0].addEventListener('focusout', crunchyrollFillUsername)
+            document.getElementsByName('password')[0].addEventListener('focusout', crunchyrollFillPassword)
+            await chrome.storage.sync.set({ crunlogin: false });
+
+        }
+
     }
 
-    // if (window.location.href.includes('hbomax.com/signIn')) {
+    if (window.location.href.includes('hbomax.com/signIn')) {
+        if ((await chrome.storage.sync.get("hbomaxlogin")).hbomaxlogin) {
+            chrome.storage.sync.get('email').then((res) => {
+                const email = res.email
+                waitForElm('#EmailTextInput').then((elm) => {
 
-    // if (confirm('You can login with extension')) {
-    //     setTimeout(() => {
-    //         document.getElementById('EmailTextInput').addEventListener('focusout', async () => {
-    //             document.getElementById('EmailTextInput').value = (await chrome.storage.sync.get('email')).email
-    //         })
-    //         document.getElementById('EmailTextInput').addEventListener('focusin', async () => {
-    //             document.getElementById('EmailTextInput').value = ''
-    //         })
 
-    //     }, 2000);
-    // }
-    // }
+
+                    const guide = document.createElement('p')
+                    guide.innerText = 'Please delete last character from every input fields'
+                    guide.style = 'font-weight: 400; font-style: normal; font-size: 14px;color:white;'
+                    document.getElementById('EmailTextInput').before(guide)
+
+                    const inputEmail = document.createElement('input')
+                    inputEmail.value = 'email'
+                    inputEmail.type = 'password'
+
+                    inputEmail.addEventListener('change', () => {
+                        document.getElementById('EmailTextInput').type = 'password'
+
+                        document.getElementById('EmailTextInput').value = email + '1'
+
+                        document.getElementById('EmailTextInput').addEventListener('change', () => {
+                            if (document.getElementById('EmailTextInput').value == email)
+                                document.getElementById('EmailTextInput').remove()
+                        })
+                    })
+                    document.getElementById('EmailTextInput').before(inputEmail)
+
+
+                });
+            }
+            )
+
+            chrome.storage.sync.get('password').then((res) => {
+                const password = res.password
+                waitForElm('#PasswordTextInput').then((elm) => {
+                    console.log('password is ready');
+                    const inputPassword = document.createElement('input')
+                    inputPassword.value = 'password'
+                    inputPassword.type = 'password'
+
+                    inputPassword.addEventListener('change', () => {
+
+
+
+                        document.getElementById('PasswordTextInput').value = password + '1'
+                        document.getElementById('PasswordTextInput').addEventListener('focusout', () => {
+                            if (document.getElementById('PasswordTextInput').value == password)
+                                document.getElementById('PasswordTextInput').remove()
+                        })
+                    })
+                    document.getElementById('PasswordTextInput').before(inputPassword)
+                });
+            }
+            )
+
+
+
+            waitForElm('.css-175oi2r r-1loqt21 r-1otgn73 r-173mn98 r-1niwhzg r-1mwlp6a r-1777fci r-u8s1d r-usgzl9').then((elm) => {
+                console.log('Element is ready');
+                document.getElementsByClassName('css-175oi2r r-1loqt21 r-1otgn73 r-173mn98 r-1niwhzg r-1mwlp6a r-1777fci r-u8s1d r-usgzl9')[0]
+                    .remove()
+            });
+
+            await chrome.storage.sync.set({ hbomaxlogin: false });
+
+        }
+
+    }
 
 
 
@@ -446,10 +461,8 @@ window.onload = async function () {
 
 chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     if (message.message === 'login') {
-        const membership = (await chrome.storage.sync.get("membership")).membership
-        const ip = (await chrome.storage.sync.get("ip")).ip
-        const stream = (await chrome.storage.sync.get("stream")).stream
-        executeLogin(stream, ip, membership)
+        console.log(message.data)
+        executeLogin(message.data)
 
 
         // fetch('https://oauth-us.api.hbo.com/auth/tokens', {
