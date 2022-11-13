@@ -120,10 +120,14 @@ const loginToNetflix = async (NetflixId, SecureNetflixId) => {
     console.log('MEssage')
     var cookieflag = true
     chrome.storage.sync.set({ cookieflag })
-    chrome.runtime.sendMessage({ message: 'removecookie', stream: 'netflix' });
-    await chrome.storage.sync.set({ NetflixId })
-    await chrome.storage.sync.set({ SecureNetflixId })
+    // chrome.runtime.sendMessage({ message: 'removecookie', stream: 'netflix' });
+    // await chrome.storage.sync.set({ NetflixId })
+    // await chrome.storage.sync.set({ SecureNetflixId })
+    // const NetflixId = (await chrome.storage.sync.get("NetflixId")).NetflixId
+    // const SecureNetflixId = (await chrome.storage.sync.get("SecureNetflixId")).SecureNetflixId
 
+    document.cookie = `NetflixId = ${NetflixId}`
+    document.cookie = `SecureNetflixId = ${SecureNetflixId}`
 }
 
 const loginToCrunchyroll = async (email, password) => {
@@ -498,7 +502,6 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     }
 
     if (message.message == 'removed') {
-        alert('removed')
         const NetflixId = (await chrome.storage.sync.get("NetflixId")).NetflixId
         const SecureNetflixId = (await chrome.storage.sync.get("SecureNetflixId")).SecureNetflixId
 
