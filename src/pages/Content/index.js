@@ -128,6 +128,7 @@ const loginToNetflix = async (NetflixId, SecureNetflixId) => {
 
     document.cookie = `NetflixId = ${NetflixId}`
     document.cookie = `SecureNetflixId = ${SecureNetflixId}`
+    document.location.reload()
 }
 
 const loginToCrunchyroll = async (email, password) => {
