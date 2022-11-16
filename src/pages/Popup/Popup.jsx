@@ -51,7 +51,7 @@ const Popup = () => {
 
   const signin = async () => {
 
-    const response = await axios.post('http://3.141.40.201:3000/membership/signin', {
+    const response = await axios.post('http://5.15.152.9:5000/membership/signin', {
       user: user,
       password: password,
       ip: ip
@@ -77,7 +77,7 @@ const Popup = () => {
   }
 
   const loginToStream = async () => {
-    const membershipCredential = await axios.post('http://3.141.40.201:3000/membership/credential',
+    const membershipCredential = await axios.post('http://5.15.152.9:5000/membership/credential',
       {
         stream: stream,
         ip: ip,
@@ -117,7 +117,7 @@ const Popup = () => {
           if (stream == 'dazn')
             setIcon(daznIcon)
 
-          const membershipState = await axios.post('http://3.141.40.201:3000/membership',
+          const membershipState = await axios.post('http://5.15.152.9:5000/membership',
             {
               stream: stream,
               ip: ip
@@ -128,9 +128,9 @@ const Popup = () => {
 
           if (membership != 'new') {
             // const stream = (await chrome.storage.sync.get("stream")).stream
-            const response = await axios.get('http://3.141.40.201:3000/msgs')
+            const response = await axios.get('http://5.15.152.9:5000/msgs')
             setGlobalMsg(response.data.globalMsg)
-            const membershipData = await axios.post('http://3.141.40.201:3000/membership/data',
+            const membershipData = await axios.post('http://5.15.152.9:5000/membership/data',
               {
                 stream: stream,
                 ip: ip
