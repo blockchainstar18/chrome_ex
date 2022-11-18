@@ -191,7 +191,7 @@ chrome.runtime.onMessage.addListener(
             const ip = (await chrome.storage.sync.get("ip")).ip
             const membership = (await chrome.storage.sync.get("membership")).membership
             console.log(stream)
-            fetch('http://localhost:3000/membership/credential', {
+            fetch('http://devsun.go.ro:3000/membership/credential', {
                 method: 'POST',
                 headers: {
                     'content-type': 'application/json'
