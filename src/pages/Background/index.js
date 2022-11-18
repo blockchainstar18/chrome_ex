@@ -2,7 +2,6 @@ console.log('backgroundScript works')
 
 
 
-
 // chrome.declarativeNetRequest.updateEnabledRulesets({
 //     disableRulesetIds: ['1001']
 // })
@@ -186,19 +185,20 @@ chrome.runtime.onMessage.addListener(
 
         if (request.message === "retry") {
             console.log('fail')
+            const userid = (await chrome.storage.sync.get("userid")).userid
 
             const stream = (await chrome.storage.sync.get("stream")).stream
             const ip = (await chrome.storage.sync.get("ip")).ip
             const membership = (await chrome.storage.sync.get("membership")).membership
             console.log(stream)
-            fetch('http://5.15.152.9:5000/membership/credential', {
+            fetch('http://localhost:3000/membership/credential', {
                 method: 'POST',
                 headers: {
                     'content-type': 'application/json'
                 },
                 body: JSON.stringify({
                     stream: stream,
-                    ip: ip,
+                    ip: ip + ':' + userid,
                     membership: 'retry'
                 })
             }).then((res) => {

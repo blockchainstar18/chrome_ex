@@ -150,6 +150,26 @@ input:focus {
   color: #888888;
 }
 
+
+.errormsg {
+  position: absolute;
+  width: 168px;
+  height: 32px;
+  left: 216px;
+  top: 50px;
+
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  /* or 133% */
+
+  text-align: center;
+
+  color: #e40a0a;
+}
+
 .lgnpad {
   position: absolute;
   left: 200px;
@@ -313,6 +333,14 @@ input:focus {
   right: 150px;
 }
 
+.streamS {
+  height: 50px;
+  position: absolute;
+  top: 7px;
+  right: 150px;
+}
+
+
 .streamlgnbtn:hover {
   background: #79efb6;
 }
@@ -383,4 +411,12 @@ input:focus {
   display: inline;
   color: #56BF8D;
   cursor: pointer;
+}
+
+.msgs {
+  background: #222222;
+  border-radius: 3px;
+  padding: 10px;
+  margin-bottom: 15px;
+  width: fit-content;
 }

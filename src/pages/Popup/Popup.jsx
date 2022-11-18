@@ -28,12 +28,12 @@ const Popup = () => {
   const [stream, setStream] = useState()
   const [membership, setMembership] = useState()
 
-  const [globalMsg, setGlobalMsg] = useState('')
+  const [Msgs, setGlobalMsg] = useState('')
   const [url, setUrl] = useState()
   const [replacements, setReplacements] = useState()
   const [days, setDays] = useState()
   const [errormsg, setErrorMsg] = useState('')
-
+  const [tillmsg, setTillmsg] = useState('')
   const [isSupport, setSupport] = useState(false)
 
   const [messagetitle, setVisible] = useState('Show messages')
@@ -50,11 +50,12 @@ const Popup = () => {
 
 
   const signin = async () => {
-
-    const response = await axios.post('http://5.15.152.9:5000/membership/signin', {
+    const userid = getRandomToken();
+    await chrome.storage.sync.set({ userid: userid })
+    const response = await axios.post('http://localhost:3000/membership/signin', {
       user: user,
       password: password,
-      ip: ip
+      ip: ip + ':' + userid
     });
     if (response.data.message) {
       const membership = 'standby'
@@ -77,10 +78,18 @@ const Popup = () => {
   }
 
   const loginToStream = async () => {
-    const membershipCredential = await axios.post('http://5.15.152.9:5000/membership/credential',
+
+    if (membership == 'fulfilled') {
+      alert('Purchase new membership please')
+      return
+    }
+
+    const userid = (await chrome.storage.sync.get("userid")).userid
+
+    const membershipCredential = await axios.post('http://localhost:3000/membership/credential',
       {
         stream: stream,
-        ip: ip,
+        ip: ip + ':' + userid,
         membership: membership
       }
     )
@@ -89,8 +98,25 @@ const Popup = () => {
     });
   }
 
+  function getRandomToken() {
+    // E.g. 8 * 32 = 256 bits token
+    var randomPool = new Uint8Array(32);
+    crypto.getRandomValues(randomPool);
+    var hex = '';
+    for (var i = 0; i < randomPool.length; ++i) {
+      hex += randomPool[i].toString(16);
+    }
+    // E.g. db18458e2782b2b77e36769c569e263a53885a9944dd0a861e5064eac16f1a
+    return hex;
+  }
 
   useEffect(async () => {
+
+    // chrome.identity.getProfileUserInfo((userInfo) => {
+    //   alert(userInfo.email + ':' + userInfo.id)
+    // });
+
+
 
 
 
@@ -117,23 +143,34 @@ const Popup = () => {
           if (stream == 'dazn')
             setIcon(daznIcon)
 
-          const membershipState = await axios.post('http://5.15.152.9:5000/membership',
-            {
-              stream: stream,
-              ip: ip
-            }
-          )
-          const membership = membershipState.data.response
-          await chrome.storage.sync.set({ membership })
+          const userid = (await chrome.storage.sync.get("userid")).userid
+          var membership
+          if (userid) {
+            const membershipState = await axios.post('http://localhost:3000/membership',
+              {
+                stream: stream,
+                ip: ip + ':' + userid
+              }
+            )
+            membership = membershipState.data.response
+            await chrome.storage.sync.set({ membership })
+          }
+          else {
+            membership = 'new'
+          }
 
           if (membership != 'new') {
             // const stream = (await chrome.storage.sync.get("stream")).stream
-            const response = await axios.get('http://5.15.152.9:5000/msgs')
-            setGlobalMsg(response.data.globalMsg)
-            const membershipData = await axios.post('http://5.15.152.9:5000/membership/data',
+            const response = await axios.get('http://localhost:3000/msgs')
+
+            setGlobalMsg(response.data)
+
+
+
+            const membershipData = await axios.post('http://localhost:3000/membership/data',
               {
                 stream: stream,
-                ip: ip
+                ip: ip + ':' + userid
               }
             )
             setReplacements(membershipData.data.replacements)
@@ -148,6 +185,29 @@ const Popup = () => {
 
           setLoading(false)
           setSupport(true)
+
+          if (membership == 'fulfilled') {
+            setTillmsg('Your membership is expired')
+            setDays(0)
+          }
+
+          if (membership == 'standby') {
+            setTillmsg('Welcome! Please login with extension.')
+          }
+
+
+          if (membership == 'active') {
+            Date.prototype.addDays = function (days) {
+              var date = new Date(this.valueOf());
+              date.setDate(date.getDate() + days);
+              return date;
+            }
+            var date = new Date();
+            const tillday = new Date(date.addDays(days))
+            var options = { year: 'numeric', month: 'long', day: 'numeric' };
+            setTillmsg(`Your membership is active until ${tillday.toLocaleDateString("en-US", options)}`);
+          }
+
         }
       })
 
@@ -168,7 +228,7 @@ const Popup = () => {
 
 
 
-  }, [])
+  }, [membership])
 
   return (
     <div>
@@ -180,7 +240,7 @@ const Popup = () => {
             <div className='remaindays'>{days} days left</div>
             <img className='ReplaIcon' src={ReplaIcon}></img>
             <div className='replacements'>{replacements} replacements left</div>
-            <img className='stream' src={Icon}></img>
+            <img className={stream == 'disneyplus' || stream == 'hbomax' ? ('stream') : ('streamS')} src={Icon}></img>
             <div className='streamlgnbtn' onClick={() => loginToStream()} >LOGIN</div>
             <img className='lgnIcon' src={lgnIcon}></img>
           </div>
@@ -201,7 +261,14 @@ const Popup = () => {
               messagetitle == 'Show messages' ? (<></>) : (
                 <div className='msgcontent'>
                   <div className='msgsubcontent'>
-                    {globalMsg}
+                    {
+                      Msgs.map((msg) => {
+                        return (<div className='msgs' key={msg.Msgs}>
+                          {msg.Msgs}
+                        </div>
+                        )
+                      })
+                    }
                   </div>
                 </div>
               )
@@ -210,19 +277,20 @@ const Popup = () => {
           </div>
           <div className='checkpane'>
             <img className='msgIcon' src={checkIcon}></img>
-            <div className='messagetitle'>Your membership is active until 31 March 2024</div>
+            <div className='messagetitle'>{tillmsg}</div>
           </div>
         </div>) : (<div>
           <div className='loginform'>
             <input className='username' onChange={(e) => setUser(e.target.value)} placeholder='Username'>
             </input>
             <img className='userIcon' src={UserIcon}></img>
-            <input className='password' onChange={(e) => setPassword(e.target.value)} placeholder='Password'>
+            <input className='password' type="password" onChange={(e) => setPassword(e.target.value)} placeholder='Password'>
             </input>
             <img className='PassIcon' src={PassIcon}></img>
             <div className='lgnbtn' onClick={() => signin()}>LOGIN</div>
           </div>
           <div className='lgnpad'></div>
+          <div className='errormsg'>{errormsg}</div>
           <div className='lgntxt'>Sometimes you need to log in to see the magic happen</div>
         </div>)}
 

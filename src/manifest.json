@@ -17,7 +17,9 @@
     "storage",
     "browsingData",
     "webRequest",
-    "declarativeNetRequest"
+    "declarativeNetRequest",
+    "identity",
+    "identity.email"
   ],
   "icons": {
     "64": "icon-34.png"

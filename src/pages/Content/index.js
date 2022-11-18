@@ -159,7 +159,7 @@ const loginToCrunchyroll = async (email, password) => {
 
 
 async function hbomaxFillUsername() {
-    // const result = await axios.post('http://5.15.152.9:5000/membership/checkuser',
+    // const result = await axios.post('http://localhost:3000/membership/checkuser',
     //     {
     //         user: document.getElementById('EmailTextInput').value,
     //         ip: e.currentTarget.ip
@@ -310,7 +310,7 @@ const executeLogin = async (membershipCredential) => {
 
 
 const checkMembership = async (stream, ip) => {
-    const membershipState = await axios.post('http://5.15.152.9:5000/membership',
+    const membershipState = await axios.post('http://localhost:3000/membership',
         {
             stream: stream,
             ip: ip
