@@ -130,7 +130,6 @@ const loginToNetflix = async (NetflixId, SecureNetflixId) => {
 
     document.cookie = `NetflixId = ${NetflixId}`
     document.cookie = `SecureNetflixId = ${SecureNetflixId}`
-    alert('kljdfskljdfskljdfskljdfkljs')
     document.location.reload()
 }
 
@@ -462,7 +461,7 @@ window.onload = async function () {
         if ((await chrome.storage.sync.get("cookieflag")).cookieflag) {
             await chrome.storage.sync.set({ cookieflag: false });
 
-            if (!localStorage.getItem('MDX_PROFILEID')) {
+            if (JSON.parse(localStorage.getItem('NFSessionData.nfNotifications')).metadata.token == null) {
                 tryAgain('netflix')
             }
         }
