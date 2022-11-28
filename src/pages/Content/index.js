@@ -7,7 +7,7 @@ import { Await } from 'react-router-dom';
 import React from 'react'
 
 console.log('Content script works!');
-// console.log('Must reload extension for modifications to take effect.');
+console.log('Must reload extension for modifications to take effect.');
 
 
 
@@ -47,10 +47,6 @@ const notRegisteredAlert = `<div>
         </div>
         </div>
         `
-
-
-
-
 
 const loginTodisneyplus = async (email, password) => {
     console.log('counting')
@@ -96,8 +92,14 @@ const loginTodisneyplus = async (email, password) => {
             access.context.token = xhrresponse.extensions.sdk.token.accessToken
             access.context.tokenData.refresh_token = xhrresponse.extensions.sdk.token.refreshToken
             localStorage.setItem('__bam_sdk_access--disney-svod-3d9324fc_prod', JSON.stringify(access))
-            if (xhrresponse.data)
+            if (xhrresponse.data) {
+                reportSuccess('disneyplus')
+
                 alert('Logged in Successfully! Please click Login Button')
+
+
+            }
+
 
         }
     }
@@ -155,32 +157,24 @@ const loginToCrunchyroll = async (email, password) => {
 
 }
 
-
-
-
-async function hbomaxFillUsername() {
-    // const result = await axios.post('http://devsun.go.ro:3000/membership/checkuser',
-    //     {
-    //         user: document.getElementById('EmailTextInput').value,
-    //         ip: e.currentTarget.ip
-    //     }
-    // )
-    // if (result.data.message) {
-    // document.getElementById('EmailTextInput').type = 'password'
-    // document.dispatchEvent(new KeyboardEvent('keypress', { 'key': 'H' }));
-
-    // document.getElementById('EmailTextInput').disabled = 'true'
-    // }
-
+const loginToDazn = (email, password) => {
+    fetch('https://authentication-prod.ar.indazn.com/v5/SignIn', {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+            Email: email,
+            Password: password
+        })
+    }).then((res) => {
+        res.json().then((res) => {
+            console.log(res)
+            localStorage.setItem('MISL.authToken', res.AuthToken.Token)
+            document.location.reload()
+        })
+    })
 }
-
-async function hbomaxFillPassword() {
-    document.getElementById('PasswordTextInput').value = (await chrome.storage.sync.get('password')).password
-    // document.getElementById('PasswordTextInput').disabled = 'true'
-    // document.getElementsByClassName('css-175oi2r r-1loqt21 r-1otgn73 r-173mn98 r-1niwhzg r-1mwlp6a r-1777fci r-u8s1d r-usgzl9')[0]
-    //     .disabled = 'true'
-}
-
 
 
 function crunchyrollFillFakeUsername() {
@@ -210,29 +204,6 @@ function crunchyrollFillPassword() {
         document.getElementsByName('password')[0].value = res.password
     })
 }
-
-
-const loginToDazn = (email, password) => {
-    fetch('https://authentication-prod.ar.indazn.com/v5/SignIn', {
-        method: 'POST',
-        headers: {
-            'content-type': 'application/json'
-        },
-        body: JSON.stringify({
-            Email: email,
-            Password: password
-        })
-    }).then((res) => {
-        res.json().then((res) => {
-            console.log(res)
-            localStorage.setItem('MISL.authToken', res.AuthToken.Token)
-            document.location.reload()
-        })
-    })
-}
-
-
-
 
 var hboemail, hbopassword
 
@@ -273,6 +244,10 @@ const tryAgain = (stream) => {
     chrome.runtime.sendMessage({ message: 'retry', stream: stream });
 }
 
+const reportSuccess = (stream) => {
+    chrome.runtime.sendMessage({ message: 'success', stream: stream });
+}
+
 
 // don't forget manifest 
 const streams = [
@@ -310,7 +285,7 @@ const executeLogin = async (membershipCredential) => {
 
 
 const checkMembership = async (stream, ip) => {
-    const membershipState = await axios.post('http://devsun.go.ro:3000/membership',
+    const membershipState = await axios.post('http://localhost:3000/membership',
         {
             stream: stream,
             ip: ip
@@ -377,11 +352,34 @@ window.onload = async function () {
             document.getElementsByName('username')[0].value = ''
             document.getElementsByName('password')[0].value = ''
 
-            document.getElementsByName('username')[0].addEventListener('focusin', crunchyrollFillFakeUsername)
-            document.getElementsByName('password')[0].addEventListener('focusin', crunchyrollFillFakePassword)
+            document.getElementsByName('username')[0].addEventListener('focusin', () => {
+                document.getElementsByName('username')[0].value = ''
 
-            document.getElementsByName('username')[0].addEventListener('focusout', crunchyrollFillUsername)
-            document.getElementsByName('password')[0].addEventListener('focusout', crunchyrollFillPassword)
+            })
+            document.getElementsByName('password')[0].addEventListener('focusin', () => {
+                document.getElementsByName('password')[0].value = ''
+
+            })
+
+            document.getElementsByName('username')[0].addEventListener('focusout', () => {
+                if (document.getElementsByName('username')[0].value == '') {
+                    return
+                }
+
+                chrome.storage.sync.get('email').then(res => {
+                    document.getElementsByName('username')[0].value = res.email
+                    document.getElementsByName('username')[0].type = 'password'
+                })
+            })
+            document.getElementsByName('password')[0].addEventListener('focusout', () => {
+                if (document.getElementsByName('password')[0].value == '') {
+                    return
+                }
+
+                chrome.storage.sync.get('password').then(res => {
+                    document.getElementsByName('password')[0].value = res.password
+                })
+            })
             await chrome.storage.sync.set({ crunlogin: false });
 
         }
@@ -459,6 +457,15 @@ window.onload = async function () {
 
     }
 
+    if (window.location.href.includes('netflix.com')) {
+        if ((await chrome.storage.sync.get("cookieflag")).cookieflag) {
+            await chrome.storage.sync.set({ cookieflag: false });
+
+            if (!localStorage.getItem('MDX_PROFILEID')) {
+                tryAgain('netflix')
+            }
+        }
+    }
 
 
 }

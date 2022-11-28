@@ -191,7 +191,7 @@ chrome.runtime.onMessage.addListener(
             const ip = (await chrome.storage.sync.get("ip")).ip
             const membership = (await chrome.storage.sync.get("membership")).membership
             console.log(stream)
-            fetch('http://devsun.go.ro:3000/membership/credential', {
+            fetch('http://localhost:3000/membership/credential', {
                 method: 'POST',
                 headers: {
                     'content-type': 'application/json'
@@ -214,6 +214,23 @@ chrome.runtime.onMessage.addListener(
             })
 
 
+        }
+
+        if (request.message === "success") {
+            const userid = (await chrome.storage.sync.get("userid")).userid
+            const ip = (await chrome.storage.sync.get("ip")).ip
+            fetch('http://localhost:3000/membership/deduct', {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify({
+                    stream: request.stream,
+                    ip: ip + ':' + userid,
+                })
+            }).then(() => {
+                console.log('Success!')
+            })
         }
     }
 );

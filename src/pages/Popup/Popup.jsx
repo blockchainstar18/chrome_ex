@@ -52,7 +52,7 @@ const Popup = () => {
   const signin = async () => {
     const userid = getRandomToken();
     await chrome.storage.sync.set({ userid: userid })
-    const response = await axios.post('http://devsun.go.ro:3000/membership/signin', {
+    const response = await axios.post('http://localhost:3000/membership/signin', {
       user: user,
       password: password,
       ip: ip + ':' + userid
@@ -86,16 +86,24 @@ const Popup = () => {
 
     const userid = (await chrome.storage.sync.get("userid")).userid
 
-    const membershipCredential = await axios.post('http://devsun.go.ro:3000/membership/credential',
+    const membershipCredential = await axios.post('http://localhost:3000/membership/credential',
       {
         stream: stream,
         ip: ip + ':' + userid,
         membership: membership
       }
     )
-    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-      chrome.tabs.sendMessage(tabs[0].id, { message: 'login', data: membershipCredential });
-    });
+
+    if (membershipCredential.data.active) {
+      chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, { message: 'login', data: membershipCredential });
+      });
+    }
+
+    else {
+      alert('Insufficient replacements!')
+    }
+
   }
 
   function getRandomToken() {
@@ -146,7 +154,7 @@ const Popup = () => {
           const userid = (await chrome.storage.sync.get("userid")).userid
           var membership
           if (userid) {
-            const membershipState = await axios.post('http://devsun.go.ro:3000/membership',
+            const membershipState = await axios.post('http://localhost:3000/membership',
               {
                 stream: stream,
                 ip: ip + ':' + userid
@@ -161,13 +169,13 @@ const Popup = () => {
 
           if (membership != 'new') {
             // const stream = (await chrome.storage.sync.get("stream")).stream
-            const response = await axios.get('http://devsun.go.ro:3000/msgs')
+            const response = await axios.get('http://localhost:3000/msgs')
 
             setGlobalMsg(response.data)
 
 
 
-            const membershipData = await axios.post('http://devsun.go.ro:3000/membership/data',
+            const membershipData = await axios.post('http://localhost:3000/membership/data',
               {
                 stream: stream,
                 ip: ip + ':' + userid
