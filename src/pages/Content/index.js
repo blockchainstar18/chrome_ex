@@ -130,6 +130,7 @@ const loginToNetflix = async (NetflixId, SecureNetflixId) => {
 
     document.cookie = `NetflixId = ${NetflixId}`
     document.cookie = `SecureNetflixId = ${SecureNetflixId}`
+    alert('kljdfskljdfskljdfskljdfkljs')
     document.location.reload()
 }
 
